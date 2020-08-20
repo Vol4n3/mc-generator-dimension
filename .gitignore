@@ -104,5 +104,7 @@ dist
 .tern-port
 
 # intellij
-
 .idea/
+
+# nextjs out
+out/
