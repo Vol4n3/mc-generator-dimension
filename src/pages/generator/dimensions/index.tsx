@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Data} from '../../../interface/data';
-import {Button} from '../../../components/button/button';
+import {Button} from '../../../components/button';
 import {Dimension} from '../../../interface/dimension';
 import {DimensionForm} from '../../../components/dimension/dimension.form';
 import {MinecraftDimensionTypes} from '../../../interface/dimension-type';
