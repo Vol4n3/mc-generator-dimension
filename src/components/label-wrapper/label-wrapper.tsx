@@ -4,18 +4,19 @@ import {LabelWrapperLabel} from './label-wrapper-label';
 import {LabelWrapperCaption} from './label-wrapper-caption';
 
 export interface LabelWrapperProps {
-
+  label?: string;
+  caption?: string;
 }
 
 export const LabelWrapper: FC<LabelWrapperProps> = props => {
-  const {children} = props;
+  const {children, label, caption} = props;
 
   const labelChild = QueryChildrenByType(children, LabelWrapperLabel);
   const captionChild = QueryChildrenByType(children, LabelWrapperCaption);
   const filterChildren = ExcludeChildrenByType(children, [LabelWrapperCaption, LabelWrapperLabel]);
   return <div>
-    {labelChild}
+    {labelChild || <LabelWrapperLabel>{label}</LabelWrapperLabel>}
     {filterChildren}
-    {captionChild}
+    {captionChild || <LabelWrapperCaption>{caption}</LabelWrapperCaption>}
   </div>
 }

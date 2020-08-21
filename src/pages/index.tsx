@@ -1,12 +1,10 @@
-import {LabelWrapper} from '../component/label-wrapper/label-wrapper';
-import {LabelWrapperCaption} from '../component/label-wrapper/label-wrapper-caption';
+import Link from 'next/link';
 
 const IndexPage = () => {
   return <div>
-    <LabelWrapper>
-      <LabelWrapperCaption>qsd</LabelWrapperCaption>
-      <input type={'text'} />
-    </LabelWrapper>
+    <Link href={'/generator/dimensions'}>
+      <a href={'/generator/dimensions'}>dimension</a>
+    </Link>
   </div>
 }
 export default IndexPage;
