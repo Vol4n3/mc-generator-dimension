@@ -11,7 +11,8 @@
     "build": "next build",
     "export": "next export",
     "stopservice": "sudo systemctl stop volcrafttools",
-    "startservice": "sudo systemctl start volcrafttools"
+    "startservice": "sudo systemctl start volcrafttools",
+    "maj": "yarn stopservice && yarn build && yarn startservice"
   },
   "dependencies": {
     "file-saver": "^2.0.2",
