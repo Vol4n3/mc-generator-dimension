@@ -1,4 +1,6 @@
 import {Structures} from './structures';
+import {FeaturesType} from './features';
+import {BlocksType} from './blocks';
 
 export interface VanillaLayered {
   large_biomes: boolean;
@@ -77,18 +79,18 @@ export interface NoiseSettings {
 }
 
 export interface FlatSettings {
-  layers: { height: number, block: string }[];
+  layers: { height: number, block: BlocksType }[];
   biome: string;
   lakes?: boolean;
-  features?: string[][];
+  features?: FeaturesType[][];
   structures: Structures;
 }
-
+export type DimensionGeneratorType = 'minecraft:noise' | 'minecraft:flat' | 'minecraft:debug';
 export interface DimensionGenerator {
   /*
     if of generator minecraft: flat,noise,debug
    */
-  type: string | 'minecraft:flat';
+  type: DimensionGeneratorType;
   seed: number;
   /**
    * noise settings id or flat settings
@@ -98,10 +100,14 @@ export interface DimensionGenerator {
 }
 
 export interface Dimension {
+  /**
+   * used for filename
+   */
   name: string;
+  id: number;
   generator?: DimensionGenerator;
   /**
    * id name   of dimension_type
    */
-  type?: string;
+  type: string;
 }

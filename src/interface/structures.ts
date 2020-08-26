@@ -7,11 +7,10 @@ export interface OtherStructures{
   }
 }
 export interface Structures {
-
-  stronghold: {
+  stronghold?: {
     distance:number;
     count: number;
     spread: number;
   };
-  structures: OtherStructures
+  structures?: OtherStructures
 }

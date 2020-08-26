@@ -8,7 +8,7 @@ const StyledButton = styled.button`
 `;
 export const Button: FC<ButtonProps> = props =>{
   const {children, ...rest} = props;
-  return <StyledButton {...rest}>
+  return <StyledButton type={'button'} {...rest}>
     {children}
   </StyledButton>
 }

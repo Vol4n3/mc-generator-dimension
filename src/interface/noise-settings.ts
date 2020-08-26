@@ -1,4 +1,6 @@
 import {Structures} from './structures';
+import {BlocksType} from './blocks';
+import {FluidsType} from './fluids';
 
 export interface NoiseSettings {
   bedrock_roof_position: number;
@@ -34,14 +36,14 @@ export interface NoiseSettings {
     amplified: boolean;
   },
   default_block: {
-    Name: string,
+    Name: BlocksType,
     Properties?: {
       state?: string
       level?: string;
     }
   },
   default_fluid: {
-    Name: string;
+    Name: FluidsType;
     Properties: {
       level?: number
     },

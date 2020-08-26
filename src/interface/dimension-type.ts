@@ -1,7 +1,8 @@
 export const MinecraftDimensionTypes = ['minecraft:overworld', 'minecraft:overworld_caves', 'minecraft:the_nether', 'minecraft:the_end'];
 
 export interface DimensionType {
-  name?: string;
+  name: string;
+  id: number;
   ultrawarm: boolean;
   natural: boolean;
   coordinate_scale: number;
