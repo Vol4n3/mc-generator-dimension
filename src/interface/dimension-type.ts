@@ -2,4 +2,17 @@ export const MinecraftDimensionTypes = ['minecraft:overworld', 'minecraft:overwo
 
 export interface DimensionType {
   name?: string;
+  ultrawarm: boolean;
+  natural: boolean;
+  coordinate_scale: number;
+  has_skylight: boolean;
+  has_ceiling: boolean;
+  ambient_light: number;
+  fixed_time?: number;
+  piglin_safe: boolean;
+  bed_works: boolean;
+  respawn_anchor_works: boolean;
+  has_raids: boolean;
+  logical_height: number;
+  infiniburn: string | "minecraft:infiniburn_end" | "minecraft:infiniburn_overworld";
 }
