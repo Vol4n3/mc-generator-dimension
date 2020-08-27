@@ -1,6 +1,7 @@
 import {Structures} from './structures';
 import {FeaturesType} from './features';
 import {BlocksType} from './blocks';
+import {BiomesType} from './biome';
 
 export interface VanillaLayered {
   large_biomes: boolean;
@@ -39,10 +40,7 @@ export interface Biome {
 }
 
 export interface MultiNoise {
-  /**
-   * minecraft:nether
-   */
-  preset: string;
+  preset: 'minecraft:nether';
   biomes: Biome[];
   humidity_noise: Noise
   altitude_noise: Noise
@@ -50,28 +48,26 @@ export interface MultiNoise {
   temperature_noise: Noise
 }
 
+export type BiomeSourceType =
+  "minecraft:vanilla_layered"
+  | "minecraft:fixed"
+  | "minecraft:checkerboard"
+  | "minecraft:multi_noise"
+  | "minecraft:the_end";
+export type Checkerboard = {
+  biomes: BiomesType[];
+  scale: number;
+}
 export interface BiomeSource {
   vanilla_layered?: VanillaLayered;
   multi_noise?: MultiNoise;
-  /**
-   * minecraft:the_end
-   */
   the_end?: string;
   fixed?: {
     biome: string;
   };
-  checkerboard?: {
-    biomes: string[];
-    scale: number;
-  }
+  checkerboard?: Checkerboard;
   seed: number;
-  /**
-   * biome type
-   * minecraft:vanilla_layered,
-   * minecraft:fixed, minecraft:checkerboard,
-   * minecraft:multi_noise, and minecraft:the_end
-   */
-  type: string;
+  type?: BiomeSourceType;
 }
 
 export interface NoiseSettings {
@@ -85,12 +81,14 @@ export interface FlatSettings {
   features?: FeaturesType[][];
   structures: Structures;
 }
+
 export type DimensionGeneratorType = 'minecraft:noise' | 'minecraft:flat' | 'minecraft:debug';
+
 export interface DimensionGenerator {
   /*
     if of generator minecraft: flat,noise,debug
    */
-  type: DimensionGeneratorType;
+  type?: DimensionGeneratorType;
   seed: number;
   /**
    * noise settings id or flat settings
@@ -105,7 +103,7 @@ export interface Dimension {
    */
   name: string;
   id: number;
-  generator?: DimensionGenerator;
+  generator: DimensionGenerator;
   /**
    * id name   of dimension_type
    */

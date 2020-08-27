@@ -1,14 +1,14 @@
 import {FormEvent, useState} from 'react';
 import {Data} from '../../../interface/data';
 import {Button} from '../../../components/button';
-import {Dimension, DimensionGenerator, DimensionGeneratorType} from '../../../interface/dimension';
+import {Dimension} from '../../../interface/dimension';
 import {DimensionForm} from '../../../components/forms';
 import {MinecraftDimensionTypes} from '../../../interface/dimension-type';
 import {exportFiles} from '../../../utils/export-zip';
 import {LabelWrapper} from '../../../components/label-wrapper';
 import {Input} from '../../../components/input';
-import {generateSeed} from '../../../utils/math.utils';
 import {Flex} from '../../../components/flex';
+import {generateSeed} from '../../../utils/math.utils';
 
 const DimensionsPage = () => {
   const [getData, setData] = useState<Data>({
@@ -47,34 +47,9 @@ const DimensionsPage = () => {
       ]
     })
   }
-  const createDimension = (type: DimensionGeneratorType) => {
-    let generator: DimensionGenerator = {
-      seed: generateSeed(),
-      settings: '',
-      type,
-    }
+  const createDimension = () => {
     const currentId = getId;
     setId(currentId + 1);
-    if (type === 'minecraft:flat') {
-      generator = {
-        ...generator,
-        settings: {
-          biome: '',
-          features: [],
-          layers: [],
-          structures: {}
-        }
-      }
-    } else {
-      generator = {
-        ...generator,
-        biome_source: {
-          seed: generateSeed(),
-          type: ''
-        }
-
-      }
-    }
     setData({
       ...getData,
       dimensions: [
@@ -83,7 +58,10 @@ const DimensionsPage = () => {
           id: currentId,
           name: '',
           type: '',
-          generator
+          generator: {
+            seed: generateSeed(),
+            settings: ''
+          }
         }
       ]
     })
@@ -105,16 +83,10 @@ const DimensionsPage = () => {
     </LabelWrapper>
     <Flex>
       <Flex col>
-        <Button onClick={() => createDimension('minecraft:noise')}>Ajouter une dimension Noise</Button>
+        <Button onClick={() => createDimension()}>Ajouter une dimension</Button>
       </Flex>
       <Flex col>
-        <Button onClick={() => createDimension('minecraft:flat')}>Ajouter une dimension Flat</Button>
-      </Flex>
-      <Flex col>
-        <Button onClick={() => createDimensionType()}>Ajouter une config de dim</Button>
-      </Flex>
-      <Flex col>
-        <Button onClick={() => createDimension('minecraft:flat')}>Ajouter une dimension Flat</Button>
+        <Button onClick={() => createDimensionType()}>Ajouter une config de dimension type</Button>
       </Flex>
     </Flex>
     {getData.dimensions.map((dim, index) => {

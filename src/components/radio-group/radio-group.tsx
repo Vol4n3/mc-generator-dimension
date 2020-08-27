@@ -1,11 +1,9 @@
 import {InputHTMLAttributes} from 'react';
 import {Input} from '../input';
 import styled from 'styled-components';
+import {Option} from '../../interface/ui';
 
-export interface Option<T> {
-  value: T;
-  label: string;
-}
+
 
 interface RadioGroupProps<T> extends InputHTMLAttributes<HTMLInputElement> {
   options: Option<T>[];
@@ -34,6 +32,7 @@ export const RadioGroup = <T extends any>(props: RadioGroupProps<T>) => {
           onInput={() => emitChecked(o.value)}
           checked={Object.is(o, selected) || undefined}
           required
+          onChange={()=>{}}
         />
         <span>{o.label}</span>
       </Label>)}
