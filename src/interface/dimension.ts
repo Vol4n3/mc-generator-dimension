@@ -70,10 +70,6 @@ export interface BiomeSource {
   type?: BiomeSourceType;
 }
 
-export interface NoiseSettings {
-
-}
-
 export interface FlatSettings {
   layers: { height: number, block: BlocksType }[];
   biome: string;

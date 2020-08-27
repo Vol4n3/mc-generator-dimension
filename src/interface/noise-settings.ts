@@ -1,8 +1,16 @@
 import {Structures} from './structures';
 import {BlocksType} from './blocks';
 import {FluidsType} from './fluids';
-
+export const noiseSettingsDefault = [
+  'minecraft:overworld',
+  'minecraft:amplified',
+  'minecraft:nether',
+  'minecraft:caves',
+  'minecraft:end',
+  'minecraft:floating_islands'
+]
 export interface NoiseSettings {
+  name: string;
   bedrock_roof_position: number;
   bedrock_floor_position: number;
   sea_level: number;

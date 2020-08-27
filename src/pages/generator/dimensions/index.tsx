@@ -9,12 +9,14 @@ import {LabelWrapper} from '../../../components/label-wrapper';
 import {Input} from '../../../components/input';
 import {Flex} from '../../../components/flex';
 import {generateSeed} from '../../../utils/math.utils';
+import {noiseSettingsDefault} from '../../../interface/noise-settings';
 
 const DimensionsPage = () => {
   const [getData, setData] = useState<Data>({
     dimensions: [],
     dimensionType: [],
-    namespace: 'generator'
+    namespace: 'generator',
+    noiseSettings: []
   });
   const [getId, setId] = useState<number>(1);
   const submitData = (event: FormEvent) => {
@@ -100,6 +102,7 @@ const DimensionsPage = () => {
         dimension={dim}
         onChange={(d) => updateDimension(index, d)}
         dimensionsTypes={[...MinecraftDimensionTypes, ...getData.dimensionType.map(dt => `${getData.namespace}:${dt.name}`)]}
+        noiseSettings={[...noiseSettingsDefault,...getData.noiseSettings.map((ns)=>ns.name)]}
       />
     })}
     <Button type={'submit'}>Export</Button>

@@ -15,18 +15,19 @@ export interface DimensionFormProps {
   dimension: Dimension;
   onChange: (d: Dimension) => void;
   dimensionsTypes: string[];
+  noiseSettings: string[];
   onRemove: () => void;
 }
 
 const Wrapper = styled.article`
     padding: 10px;
-    background: lightblue;
-    border: 1px #ccc solid;
+    background: #eee;
+    border: 1px #333 solid;
     margin: 10px auto;
 `;
 
 export const DimensionForm: FC<DimensionFormProps> = props => {
-  const {dimension, onChange, onRemove, dimensionsTypes} = props;
+  const {dimension, onChange, onRemove, dimensionsTypes, noiseSettings} = props;
   const [getShow, setShow] = useState<boolean>(true);
   const emitClose = () => {
     setShow(false);
@@ -51,7 +52,8 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
         ...generator,
         biome_source: {
           seed: generateSeed(),
-        }
+        },
+        settings: ''
       }
     }
     onChange({...dimension, generator})
@@ -93,7 +95,8 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
       {
         dimension.generator.type === 'minecraft:noise' && <NoiseForm
           generator={dimension.generator}
-          onChange={e => onChange({...dimension, generator: e})}/>
+          onChange={e => onChange({...dimension, generator: e})}
+          noiseSettings={noiseSettings}/>
       }
       {
         dimension.generator.type === 'minecraft:flat' && <div>flat</div>
