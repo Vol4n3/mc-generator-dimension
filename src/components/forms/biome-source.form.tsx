@@ -1,7 +1,8 @@
 import {FC} from 'react';
-import {BiomeSource, BiomeSourceType, Checkerboard, MultiNoise} from '../../interface/dimension';
+import {BiomeSource, BiomeSourceType, Checkerboard, MultiNoise, VanillaLayered} from '../../interface/dimension';
 import {LabelWrapper} from '../label-wrapper';
 import {Select} from '../select/select';
+import {Input} from '../input';
 
 interface BiomeSourceProps {
   biomeSource: BiomeSource;
@@ -17,9 +18,10 @@ const biomesTypes = [
 ];
 export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
   const {biomeSource, onChange} = props;
-  const emitChange = (bs: string) => {
+  const emitChangeBST = (value: string) => {
+    const bst = value as BiomeSourceType;
     let addition: any = {};
-    if (bs as BiomeSourceType === 'minecraft:multi_noise') {
+    if (bst === 'minecraft:multi_noise') {
       addition = {
         multi_noise: {
           preset: 'minecraft:nether',
@@ -31,7 +33,7 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
         }
       } as { multi_noise: MultiNoise }
     }
-    if(bs as BiomeSourceType === 'minecraft:checkerboard'){
+    if (bst === 'minecraft:checkerboard') {
       addition = {
         checkerboard: {
           biomes: [],
@@ -41,16 +43,41 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
         checkerboard: Checkerboard
       }
     }
+    if (bst === 'minecraft:fixed') {
+      addition = {
+        fixed: {
+          biome: ''
+        }
+      }
+    }
+    if (bst === 'minecraft:the_end') {
+      addition = {
+        the_end: 'minecraft:the_end'
+      }
+    }
+    if (bst === 'minecraft:vanilla_layered') {
+      addition = {
+        vanilla_layered: {
+          large_biomes: false,
+          legacy_biome_init_layer: true,
+        } as VanillaLayered
+      }
+    }
     onChange({
       ...addition,
       seed: biomeSource.seed,
-      type: bs as BiomeSourceType,
+      type: bst,
     })
   }
   return <>
-    <LabelWrapper label={'Biome type'}>
+    <LabelWrapper label={'Biome source seed'}>
+      <Input type={'number'}
+             value={biomeSource.seed}
+             onChange={e => onChange({...biomeSource, seed: parseInt(e.target.value)})}/>
+    </LabelWrapper>
+    <LabelWrapper label={'Biome source type'} caption={"The type of biome generation"}>
       <Select
-        onSelected={emitChange}
+        onSelected={emitChangeBST}
         options={biomesTypes.map((bt) => ({
           label: bt.replace('minecraft:', ''),
           value: bt
@@ -58,6 +85,36 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
         value={biomeSource.type}
         required/>
     </LabelWrapper>
-    {}
+    {
+      biomeSource.type === 'minecraft:multi_noise' && <div>
+        Multi noise : 3D biome generation used in the nether.
+      </div>
+    }
+    {
+      biomeSource.type === 'minecraft:vanilla_layered' && <div>
+        Vanilla layered : Default and large biome generation used in the overworld
+      </div>
+    }
+    {
+      biomeSource.type === 'minecraft:the_end' && <div>
+        The end : Biome generation used in the end with biome minecraft:the_end in the center and other end biomes
+        around.
+      </div>
+    }
+    {
+      biomeSource.type === 'minecraft:fixed' && <div>
+        A single biome
+        <LabelWrapper label={"Biome"}>
+          <Input type={'text'} value={biomeSource.fixed?.biome}
+                 list={'biomes'}
+                 onChange={e => onChange({...biomeSource, fixed: {biome: e.target.value}})}/>
+        </LabelWrapper>
+      </div>
+    }
+    {
+      biomeSource.type === 'minecraft:checkerboard' && <div>
+        Checkerboard: A biome generation in which biomes are square (or close to square) and repeat along the diagonals.
+      </div>
+    }
   </>
 }

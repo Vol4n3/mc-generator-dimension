@@ -57,6 +57,7 @@ export interface Biome {
   /**
    * "none", "rain", or "snow"
    */
+  name:string;
   precipitation: "none" | "rain" | "snow";
   category: BiomeCategory;
   depth: number;

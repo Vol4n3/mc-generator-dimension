@@ -1,7 +1,10 @@
 export const generateSeed = (): number => {
   return Math.round((Math.random() * 2 - 1) * Math.pow(2, 32));
 }
-
+export const parseSeed = (value: string): number => {
+  const result = parseInt(value, 10);
+  return setInRange(result, -Math.pow(2, 32), Math.pow(2, 32));
+}
 export const Compare = <T extends Date | number | string>(a: T, b: T): number => {
   return a < b ? -1 : a > b ? 1 : 0;
 };

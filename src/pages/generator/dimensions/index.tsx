@@ -9,14 +9,21 @@ import {LabelWrapper} from '../../../components/label-wrapper';
 import {Input} from '../../../components/input';
 import {Flex} from '../../../components/flex';
 import {generateSeed} from '../../../utils/math.utils';
-import {noiseSettingsDefault} from '../../../interface/noise-settings';
+import styled from 'styled-components';
+import {MainTemplate} from '../../../components/template/main.template';
+import {biomes} from '../../../interface/biome';
 
+const ExtendedDiv = styled.div`
+width: 100%;
+position: relative;
+`;
 const DimensionsPage = () => {
   const [getData, setData] = useState<Data>({
     dimensions: [],
     dimensionType: [],
     namespace: 'generator',
-    noiseSettings: []
+    noiseSettings: [],
+    biomes: []
   });
   const [getId, setId] = useState<number>(1);
   const submitData = (event: FormEvent) => {
@@ -76,36 +83,62 @@ const DimensionsPage = () => {
       ]
     })
   };
-  return <form onSubmit={submitData}>
-    <LabelWrapper label={'Namespace'} caption={'Choisir un namespace'}>
-      <Input
-        required
-        value={getData.namespace}
-        onChange={(ev) => setData({...getData, namespace: ev.target.value})}/>
-    </LabelWrapper>
-    <Flex>
-      <Flex col>
-        <Button onClick={() => createDimension()}>Ajouter une dimension</Button>
+  return <MainTemplate title={'Minecraft Generator dimension 1.16.2'}>
+    <form onSubmit={submitData}>
+      <LabelWrapper label={'Namespace'} caption={'Namespace'}>
+        <Input
+          required
+          value={getData.namespace}
+          onChange={(ev) => setData({...getData, namespace: ev.target.value})}/>
+      </LabelWrapper>
+      <Flex>
+        <Flex col={[12, 12, 3]}>
+          <ExtendedDiv>
+            <Button onClick={() => createDimension()}>Add dimension</Button>
+            {getData.dimensions.map((dim, index) => {
+              return <DimensionForm
+                onRemove={() => setData({
+                  ...getData, dimensions: [
+                    ...getData.dimensions.filter((_, i) => i !== index),
+                  ]
+                })}
+                key={dim.id}
+                dimension={dim}
+                onChange={(d) => updateDimension(index, d)}
+                dimensionsTypes={[...MinecraftDimensionTypes, ...getData.dimensionType.map(dt => `${getData.namespace}:${dt.name}`)]}
+              />
+            })}
+          </ExtendedDiv>
+        </Flex>
+        <Flex col={[12, 12, 3]}>
+          <ExtendedDiv>
+            <Button onClick={() => createDimensionType()}>Add dimension type</Button>
+          </ExtendedDiv>
+        </Flex>
+        <Flex col={[12, 12, 3]}>
+          <ExtendedDiv>
+            <Button>Add noise settings</Button>
+          </ExtendedDiv>
+        </Flex>
+        <Flex col={[12, 12, 3]}>
+          <ExtendedDiv>
+            <Button>Add biome</Button>
+          </ExtendedDiv>
+        </Flex>
       </Flex>
-      <Flex col>
-        <Button onClick={() => createDimensionType()}>Ajouter une config de dimension type</Button>
-      </Flex>
-    </Flex>
-    {getData.dimensions.map((dim, index) => {
-      return <DimensionForm
-        onRemove={() => setData({
-          ...getData, dimensions: [
-            ...getData.dimensions.filter((_, i) => i !== index),
-          ]
-        })}
-        key={dim.id}
-        dimension={dim}
-        onChange={(d) => updateDimension(index, d)}
-        dimensionsTypes={[...MinecraftDimensionTypes, ...getData.dimensionType.map(dt => `${getData.namespace}:${dt.name}`)]}
-        noiseSettings={[...noiseSettingsDefault,...getData.noiseSettings.map((ns)=>ns.name)]}
-      />
-    })}
-    <Button type={'submit'}>Export</Button>
-  </form>
+      <hr style={{marginTop: '50px'}}/>
+      <Button type={'submit'}>Export</Button>
+    </form>
+    <datalist id={'biomes'}>
+      {[...biomes, ...getData.biomes.map(b => b.name)].map((b) => <option key={b} value={b}/>)}
+    </datalist>
+    <datalist id={'noise_settings'}>
+      {getData.noiseSettings.map(ns => <option key={ns.name} value={ns.name}/>)}
+    </datalist>
+    <datalist id={'dimension_type'}>
+      {[...MinecraftDimensionTypes, ...getData.dimensionType.map(dt => `${getData.namespace}:${dt.name}`)].map(dtn =>
+        <option key={dtn} value={dtn}/>)}
+    </datalist>
+  </MainTemplate>
 }
 export default DimensionsPage;

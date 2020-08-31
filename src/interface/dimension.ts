@@ -34,14 +34,14 @@ export interface BiomeParameters {
   humidity: number;
 }
 
-export interface Biome {
-  biome: string;
+export interface BiomeWithParams {
+  biome: BiomesType | string;
   parameters: BiomeParameters;
 }
 
 export interface MultiNoise {
   preset: 'minecraft:nether';
-  biomes: Biome[];
+  biomes: BiomeWithParams[];
   humidity_noise: Noise
   altitude_noise: Noise
   weirdness_noise: Noise
@@ -55,7 +55,7 @@ export type BiomeSourceType =
   | "minecraft:multi_noise"
   | "minecraft:the_end";
 export type Checkerboard = {
-  biomes: BiomesType[];
+  biomes: (BiomesType | string)[];
   scale: number;
 }
 export interface BiomeSource {
@@ -63,7 +63,7 @@ export interface BiomeSource {
   multi_noise?: MultiNoise;
   the_end?: string;
   fixed?: {
-    biome: string;
+    biome: BiomesType | string;
   };
   checkerboard?: Checkerboard;
   seed: number;
@@ -72,7 +72,7 @@ export interface BiomeSource {
 
 export interface FlatSettings {
   layers: { height: number, block: BlocksType }[];
-  biome: string;
+  biome: BiomesType | string;
   lakes?: boolean;
   features?: FeaturesType[][];
   structures: Structures;

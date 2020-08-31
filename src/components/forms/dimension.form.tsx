@@ -1,4 +1,4 @@
-import {Dimension, DimensionGeneratorType} from '../../interface/dimension';
+import {Dimension, DimensionGenerator, DimensionGeneratorType} from '../../interface/dimension';
 import {FC, useState} from 'react';
 import {LabelWrapper} from '../label-wrapper';
 import {Input} from '../input';
@@ -7,15 +7,14 @@ import {Flex} from '../flex';
 import {Button} from '../button';
 import {RadioGroup} from '../radio-group';
 import {Animation, Keyframes} from '../animation';
-import {generateSeed} from '../../utils/math.utils';
 import {NoiseForm} from './noise.form';
 import {Select} from '../select/select';
+import {generateSeed} from '../../utils/math.utils';
 
 export interface DimensionFormProps {
   dimension: Dimension;
   onChange: (d: Dimension) => void;
   dimensionsTypes: string[];
-  noiseSettings: string[];
   onRemove: () => void;
 }
 
@@ -24,46 +23,60 @@ const Wrapper = styled.article`
     background: #eee;
     border: 1px #333 solid;
     margin: 10px auto;
+    width: 100%;
+    box-sizing: border-box;
 `;
 
 export const DimensionForm: FC<DimensionFormProps> = props => {
-  const {dimension, onChange, onRemove, dimensionsTypes, noiseSettings} = props;
+  const {dimension, onChange, onRemove, dimensionsTypes} = props;
   const [getShow, setShow] = useState<boolean>(true);
+  const [getHistoricFlat,setHistoricFlat] = useState<DimensionGenerator>(dimension.generator)
+  const [getHistoricNoise,setHistoricNoise] = useState<DimensionGenerator>(dimension.generator)
   const emitClose = () => {
     setShow(false);
     setTimeout(() => {
       onRemove()
     }, 300)
   }
+  const emitChangeGenerator = (g: DimensionGenerator)=>{
+    const dim = {...dimension, generator: g};
+    if(g.type === 'minecraft:flat'){
+      setHistoricFlat(g);
+    }
+    if(g.type === 'minecraft:noise'){
+      setHistoricNoise(g);
+    }
+    onChange(dim)
+  }
   const changeGeneratorType = (type: DimensionGeneratorType) => {
-    let generator = {...dimension.generator, type};
+    let generator: DimensionGenerator;
     if (type === 'minecraft:flat') {
       generator = {
-        ...generator,
-        settings: {
-          biome: '',
-          features: [],
-          layers: [],
-          structures: {}
-        }
+          settings: getHistoricFlat.settings ,
+          seed: getHistoricFlat.seed,
+          type
       }
     } else {
       generator = {
-        ...generator,
-        biome_source: {
-          seed: generateSeed(),
+        type,
+        biome_source: getHistoricNoise.biome_source || {
+          seed : generateSeed(),
+
+
         },
-        settings: ''
+        settings: getHistoricNoise.settings,
+        seed:getHistoricNoise.seed
       }
     }
-    onChange({...dimension, generator})
+    onChange({...dimension, generator});
+
   }
   return <Animation
-    show={getShow} onStarting enter={{keyframes: Keyframes.slideInFromTop}}
+    show={getShow} onStarting enter={{keyframes: Keyframes.slideInFromLeft}}
     exit={{keyframes: Keyframes.fadeOut}}>
     <Wrapper>
       <Flex justifyContent={['flex-end']}>
-        <Button onClick={emitClose}>X</Button>
+        <Button onClick={emitClose} style={{position:'absolute'}}>X</Button>
       </Flex>
       <LabelWrapper label={'Dimension Name'}>
         <Input
@@ -71,7 +84,7 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
           required
           onChange={(e) => onChange({...dimension, name: e.target.value})}/>
       </LabelWrapper>
-      <LabelWrapper label={'dimension Type'}>
+      <LabelWrapper label={'dimension Type'} caption={'you can choose vanilla preset or create one'}>
         <Select
           onSelected={e => onChange({...dimension, type: e})}
           options={dimensionsTypes.map((d) => ({
@@ -85,8 +98,8 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
         <RadioGroup<DimensionGeneratorType>
           name={'generator'}
           options={[
-            {value: 'minecraft:flat', label: 'Flat'},
-            {value: 'minecraft:noise', label: 'Noise'}
+            {value: 'minecraft:noise', label: 'Noise Dimension'},
+            {value: 'minecraft:flat', label: 'Flat Dimension'}
           ]}
           required
           selected={dimension.generator.type}
@@ -95,8 +108,7 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
       {
         dimension.generator.type === 'minecraft:noise' && <NoiseForm
           generator={dimension.generator}
-          onChange={e => onChange({...dimension, generator: e})}
-          noiseSettings={noiseSettings}/>
+          onChange={emitChangeGenerator}/>
       }
       {
         dimension.generator.type === 'minecraft:flat' && <div>flat</div>
