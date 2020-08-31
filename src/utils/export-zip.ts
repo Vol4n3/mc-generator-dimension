@@ -11,15 +11,17 @@ export const exportFiles = (data:Data)=>{
     }
   },null,2))
   const dataFolder = zip.folder('data');
-  const namespaceFolder = dataFolder?.folder(data.namespace);
-  const dimensionFolder = namespaceFolder?.folder('dimension');
+  const rootMinecraftFolder = dataFolder?.folder('minecraft');
+  const dimensionFolder = rootMinecraftFolder?.folder('dimension');
+  const mcNsDimFolder = dimensionFolder?.folder(data.namespace)
   data.dimensions.forEach((dim)=>{
-    dimensionFolder?.file(dim.name+'.json',JSON.stringify({
+    mcNsDimFolder?.file(dim.name+'.json',JSON.stringify({
       type: dim.type,
       generator: dim.generator
     },null,2))
   });
-  const dimensionType = namespaceFolder?.folder('dimension_type');
+  const rootNamespaceFolder = dataFolder?.folder(data.namespace);
+  const dimensionType = rootNamespaceFolder?.folder('dimension_type');
   data.dimensionType.forEach((dim)=>{
     dimensionType?.file(dim.name+'.json',JSON.stringify(dim,null,2))
   });

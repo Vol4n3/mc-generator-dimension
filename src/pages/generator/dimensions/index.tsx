@@ -12,6 +12,7 @@ import {generateSeed} from '../../../utils/math.utils';
 import styled from 'styled-components';
 import {MainTemplate} from '../../../components/template/main.template';
 import {biomes} from '../../../interface/biome';
+import {noiseSettingsDefault} from '../../../interface/noise-settings';
 
 const ExtendedDiv = styled.div`
 width: 100%;
@@ -105,7 +106,6 @@ const DimensionsPage = () => {
                 key={dim.id}
                 dimension={dim}
                 onChange={(d) => updateDimension(index, d)}
-                dimensionsTypes={[...MinecraftDimensionTypes, ...getData.dimensionType.map(dt => `${getData.namespace}:${dt.name}`)]}
               />
             })}
           </ExtendedDiv>
@@ -130,10 +130,12 @@ const DimensionsPage = () => {
       <Button type={'submit'}>Export</Button>
     </form>
     <datalist id={'biomes'}>
-      {[...biomes, ...getData.biomes.map(b => b.name)].map((b) => <option key={b} value={b}/>)}
+      {[...biomes, ...getData.biomes.map(b => `${getData.namespace}:${b.name}`)].map((b) => <option key={b}
+                                                                                                    value={b}/>)}
     </datalist>
     <datalist id={'noise_settings'}>
-      {getData.noiseSettings.map(ns => <option key={ns.name} value={ns.name}/>)}
+      {[...noiseSettingsDefault, ...getData.noiseSettings.map(ns => `${getData.namespace}:${ns.name}`)].map(nsn =>
+        <option key={nsn} value={nsn}/>)}
     </datalist>
     <datalist id={'dimension_type'}>
       {[...MinecraftDimensionTypes, ...getData.dimensionType.map(dt => `${getData.namespace}:${dt.name}`)].map(dtn =>

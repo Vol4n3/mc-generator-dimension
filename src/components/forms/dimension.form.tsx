@@ -8,13 +8,11 @@ import {Button} from '../button';
 import {RadioGroup} from '../radio-group';
 import {Animation, Keyframes} from '../animation';
 import {NoiseForm} from './noise.form';
-import {Select} from '../select/select';
 import {generateSeed} from '../../utils/math.utils';
 
 export interface DimensionFormProps {
   dimension: Dimension;
   onChange: (d: Dimension) => void;
-  dimensionsTypes: string[];
   onRemove: () => void;
 }
 
@@ -28,7 +26,7 @@ const Wrapper = styled.article`
 `;
 
 export const DimensionForm: FC<DimensionFormProps> = props => {
-  const {dimension, onChange, onRemove, dimensionsTypes} = props;
+  const {dimension, onChange, onRemove} = props;
   const [getShow, setShow] = useState<boolean>(true);
   const [getHistoricFlat,setHistoricFlat] = useState<DimensionGenerator>(dimension.generator)
   const [getHistoricNoise,setHistoricNoise] = useState<DimensionGenerator>(dimension.generator)
@@ -61,8 +59,6 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
         type,
         biome_source: getHistoricNoise.biome_source || {
           seed : generateSeed(),
-
-
         },
         settings: getHistoricNoise.settings,
         seed:getHistoricNoise.seed
@@ -85,12 +81,9 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
           onChange={(e) => onChange({...dimension, name: e.target.value})}/>
       </LabelWrapper>
       <LabelWrapper label={'dimension Type'} caption={'you can choose vanilla preset or create one'}>
-        <Select
-          onSelected={e => onChange({...dimension, type: e})}
-          options={dimensionsTypes.map((d) => ({
-            label: d.replace('minecraft:', ''),
-            value: d
-          }))}
+        <Input
+          onChange={e => onChange({...dimension, type: e.target.value})}
+          list={'dimension_type'}
           value={dimension.type}
           required/>
       </LabelWrapper>

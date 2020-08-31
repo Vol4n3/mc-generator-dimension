@@ -3,11 +3,6 @@ import {FeaturesType} from './features';
 import {BlocksType} from './blocks';
 import {BiomesType} from './biome';
 
-export interface VanillaLayered {
-  large_biomes: boolean;
-  legacy_biome_init_layer: boolean;
-}
-
 export interface Noise {
   firstOctave: number,
   amplitudes: [number, number]
@@ -38,8 +33,22 @@ export interface BiomeWithParams {
   biome: BiomesType | string;
   parameters: BiomeParameters;
 }
+export type BiomeSourceType =
+  "minecraft:vanilla_layered"
+  | "minecraft:fixed"
+  | "minecraft:checkerboard"
+  | "minecraft:multi_noise"
+  | "minecraft:the_end";
+export interface BiomeSource {
+  seed: number;
+  type?: BiomeSourceType;
+}
+export interface BiomeSourceVanillaLayered extends BiomeSource{
+  large_biomes: boolean;
+  legacy_biome_init_layer: boolean;
+}
 
-export interface MultiNoise {
+export interface BiomeSourceMultiNoise extends BiomeSource{
   preset: 'minecraft:nether';
   biomes: BiomeWithParams[];
   humidity_noise: Noise
@@ -48,26 +57,16 @@ export interface MultiNoise {
   temperature_noise: Noise
 }
 
-export type BiomeSourceType =
-  "minecraft:vanilla_layered"
-  | "minecraft:fixed"
-  | "minecraft:checkerboard"
-  | "minecraft:multi_noise"
-  | "minecraft:the_end";
-export type Checkerboard = {
+
+export interface BiomeSourceCheckerboard extends BiomeSource {
   biomes: (BiomesType | string)[];
   scale: number;
 }
-export interface BiomeSource {
-  vanilla_layered?: VanillaLayered;
-  multi_noise?: MultiNoise;
-  the_end?: string;
-  fixed?: {
-    biome: BiomesType | string;
-  };
-  checkerboard?: Checkerboard;
-  seed: number;
-  type?: BiomeSourceType;
+export interface BiomeSourceTheEnd extends BiomeSource{
+  the_end: 'minecraft:the_end';
+}
+export interface BiomeSourceFixed extends BiomeSource{
+  biome: BiomesType | string;
 }
 
 export interface FlatSettings {
