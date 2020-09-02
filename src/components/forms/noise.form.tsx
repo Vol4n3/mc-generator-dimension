@@ -30,7 +30,7 @@ export const NoiseForm: FC<NoiseFormProps> = props => {
     </LabelWrapper>
     {generator.biome_source &&
     <BiomeSourceForm
-      biomeSource={generator.biome_source as any}
+      biomeSource={generator.biome_source}
       onChange={(bs) => onChange({...generator, biome_source: bs})
       }/>}
   </>

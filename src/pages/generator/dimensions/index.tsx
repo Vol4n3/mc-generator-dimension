@@ -1,7 +1,6 @@
 import {FormEvent, useState} from 'react';
 import {Data} from '../../../interface/data';
 import {Button} from '../../../components/button';
-import {Dimension} from '../../../interface/dimension';
 import {DimensionForm} from '../../../components/forms';
 import {MinecraftDimensionTypes} from '../../../interface/dimension-type';
 import {exportFiles} from '../../../utils/export-zip';
@@ -13,6 +12,7 @@ import styled from 'styled-components';
 import {MainTemplate} from '../../../components/template/main.template';
 import {biomes} from '../../../interface/biome';
 import {noiseSettingsDefault} from '../../../interface/noise-settings';
+import {DimensionTypeForm} from '../../../components/forms/dimension-type.form';
 
 const ExtendedDiv = styled.div`
 width: 100%;
@@ -63,7 +63,6 @@ const DimensionsPage = () => {
     setData({
       ...getData,
       dimensions: [
-        ...getData.dimensions,
         {
           id: currentId,
           name: '',
@@ -72,18 +71,12 @@ const DimensionsPage = () => {
             seed: generateSeed(),
             settings: ''
           }
-        }
+        },
+        ...getData.dimensions
       ]
     })
   };
-  const updateDimension = (index: number, dimension: Dimension) => {
-    setData({
-      ...getData,
-      dimensions: [
-        ...getData.dimensions.map((dim, i) => i === index ? dimension : dim),
-      ]
-    })
-  };
+
   return <MainTemplate title={'Minecraft Generator dimension 1.16.2'}>
     <form onSubmit={submitData}>
       <LabelWrapper label={'Namespace'} caption={'Namespace'}>
@@ -105,7 +98,12 @@ const DimensionsPage = () => {
                 })}
                 key={dim.id}
                 dimension={dim}
-                onChange={(d) => updateDimension(index, d)}
+                onChange={(d) => setData({
+                  ...getData,
+                  dimensions: [
+                    ...getData.dimensions.map((dim, i) => i === index ? d : dim),
+                  ]
+                })}
               />
             })}
           </ExtendedDiv>
@@ -113,6 +111,23 @@ const DimensionsPage = () => {
         <Flex col={[12, 12, 3]}>
           <ExtendedDiv>
             <Button onClick={() => createDimensionType()}>Add dimension type</Button>
+            {getData.dimensionType.map((dim, index) => {
+              return <DimensionTypeForm
+                onRemove={() => setData({
+                  ...getData, dimensionType: [
+                    ...getData.dimensionType.filter((_, i) => i !== index),
+                  ]
+                })}
+                key={dim.id}
+                dimensionType={dim}
+                onChange={(dt) => setData({
+                  ...getData,
+                  dimensionType: [
+                    ...getData.dimensionType.map((dim, i) => i === index ? dt : dim),
+                  ]
+                })}
+              />
+            })}
           </ExtendedDiv>
         </Flex>
         <Flex col={[12, 12, 3]}>

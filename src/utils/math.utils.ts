@@ -1,6 +1,10 @@
 export const generateSeed = (): number => {
   return Math.round((Math.random() * 2 - 1) * Math.pow(2, 32));
 }
+
+export const generateRandFloat = (decimal: number = 100)=>{
+  return Math.round((Math.random() * 2 - 1) * decimal) / decimal;
+}
 export const parseSeed = (value: string): number => {
   return parseInput(value,-Math.pow(2, 32),Math.pow(2, 32))
 }

@@ -32,6 +32,7 @@ export interface BiomeParameters {
 export interface BiomeWithParams {
   biome: BiomesType | string;
   parameters: BiomeParameters;
+  id: number;
 }
 export type BiomeSourceType =
   "minecraft:vanilla_layered"
@@ -49,7 +50,7 @@ export interface BiomeSourceVanillaLayered extends BiomeSource{
 }
 
 export interface BiomeSourceMultiNoise extends BiomeSource{
-  preset: 'minecraft:nether';
+  preset?: 'minecraft:nether';
   biomes: BiomeWithParams[];
   humidity_noise: Noise
   altitude_noise: Noise

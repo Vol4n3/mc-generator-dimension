@@ -14,16 +14,9 @@ const Wrapper = styled.div`
   padding: 5px;
   background: #333;
   color: white;
-  display: inline-block;
   font-size: 0.85rem;
-  width: 170px;
+  width: 100%;
   `;
-const Ellipsis = styled.div`
-  width: 150px;
-  overflow: hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-`;
 export const Tag: FC<TagProps> = props => {
   const {onClose, label} = props;
   const [getShow, setShow] = useState<boolean>(true)
@@ -33,14 +26,15 @@ export const Tag: FC<TagProps> = props => {
       onClose();
     }, 300)
   }
-  return <Animation show={getShow} onStarting enter={{keyframes:Keyframes.fadeIn}} exit={{keyframes:Keyframes.fadeOut}}>
+  return <Animation show={getShow} onStarting enter={{keyframes: Keyframes.fadeIn}}
+                    exit={{keyframes: Keyframes.fadeOut}}>
     <Wrapper title={label}>
-      <Flex alignItems={['center']} justifyContent={['space-between']} noWrap>
-        <Ellipsis>{label}</Ellipsis>
-      <div style={{marginLeft: 'auto'}}>
-        <Button onClick={emitClose}>X</Button>
-      </div>
-      </Flex>
+        <Flex alignItems={['center']} noWrap>
+          <span>{label}</span>
+          <div style={{marginLeft: 'auto'}}>
+            <Button onClick={emitClose}>X</Button>
+          </div>
+        </Flex>
     </Wrapper>
   </Animation>
 

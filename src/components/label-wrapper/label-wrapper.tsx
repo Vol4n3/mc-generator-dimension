@@ -9,7 +9,6 @@ export interface LabelWrapperProps {
   caption?: string;
 }
 const Wrapper = styled.div`
-  margin: 10px auto;
   padding: 10px;
 `;
 export const LabelWrapper: FC<LabelWrapperProps> = props => {

@@ -15,5 +15,5 @@ export interface DimensionType {
   respawn_anchor_works: boolean;
   has_raids: boolean;
   logical_height: number;
-  infiniburn: string | "minecraft:infiniburn_end" | "minecraft:infiniburn_overworld";
+  infiniburn: string;
 }
