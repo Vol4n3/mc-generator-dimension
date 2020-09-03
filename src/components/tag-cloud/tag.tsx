@@ -12,7 +12,7 @@ interface TagProps {
 const Wrapper = styled.div`
   border: 1px #333 solid;
   padding: 5px;
-  background: #333;
+  background: #333333;
   color: white;
   font-size: 0.85rem;
   width: 100%;

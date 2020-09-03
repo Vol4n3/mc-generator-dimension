@@ -1,22 +1,23 @@
 import {Dimension, DimensionGenerator, DimensionGeneratorType, FlatSettings} from '../../interface/dimension';
 import {FC, useState} from 'react';
 import {LabelWrapper} from '../label-wrapper';
-import {Input} from '../input';
 import {RadioGroup} from '../radio-group';
 import {NoiseForm} from './noise.form';
 import {generateSeed} from '../../utils/math.utils';
 import {Card} from '../card/card';
 import {FlatSettingsForm} from './flat-settings.form';
+import {InputLabel} from '../input/input-label';
 
 export interface DimensionFormProps {
   dimension: Dimension;
   onChange: (d: Dimension) => void;
+  customBiomes: string[];
   onRemove: () => void;
 }
 
 
 export const DimensionForm: FC<DimensionFormProps> = props => {
-  const {dimension, onChange, onRemove} = props;
+  const {dimension, onChange, onRemove,customBiomes} = props;
   const [getHistoricFlat, setHistoricFlat] = useState<DimensionGenerator>(dimension.generator)
   const [getHistoricNoise, setHistoricNoise] = useState<DimensionGenerator>(dimension.generator)
   const emitChangeGenerator = (g: DimensionGenerator) => {
@@ -51,19 +52,18 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
 
   }
   return <Card onClose={onRemove} bgColor={'#cdc'}>
-    <LabelWrapper label={'Dimension Name'}>
-      <Input
+      <InputLabel
+        label={'Dimension Name'}
         value={dimension.name || ''}
         required
         onChange={(e) => onChange({...dimension, name: e.target.value})}/>
-    </LabelWrapper>
-    <LabelWrapper label={'dimension Type'} caption={'you can choose vanilla preset or create one'}>
-      <Input
+      <InputLabel
+        label={'dimension Type'}
+        caption={'you can choose vanilla preset or create one'}
         onChange={e => onChange({...dimension, type: e.target.value})}
         list={'dimension_type'}
         value={dimension.type}
         required/>
-    </LabelWrapper>
     <LabelWrapper label={'Type de générateur'}>
       <RadioGroup<DimensionGeneratorType>
         name={'generator'}
@@ -77,6 +77,7 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
     </LabelWrapper>
     {
       dimension.generator.type === 'minecraft:noise' && <NoiseForm
+        customBiomes={customBiomes}
         generator={dimension.generator}
         onChange={emitChangeGenerator}/>
     }

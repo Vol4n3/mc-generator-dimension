@@ -8,10 +8,11 @@ import {BiomeSourceForm} from './biome-source.form';
 interface NoiseFormProps {
   generator: DimensionGenerator;
   onChange: (gen: DimensionGenerator) => void;
+  customBiomes: string[]
 }
 
 export const NoiseForm: FC<NoiseFormProps> = props => {
-  const {generator, onChange} = props;
+  const {generator, onChange,customBiomes} = props;
   return <>
     <LabelWrapper label={'Generator seed'}>
       <Input
@@ -31,6 +32,7 @@ export const NoiseForm: FC<NoiseFormProps> = props => {
     {generator.biome_source &&
     <BiomeSourceForm
       biomeSource={generator.biome_source}
+      customBiomes={customBiomes}
       onChange={(bs) => onChange({...generator, biome_source: bs})
       }/>}
   </>

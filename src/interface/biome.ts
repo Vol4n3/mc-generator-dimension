@@ -1,25 +1,11 @@
 import {FeaturesType} from './features';
 import {MobsType} from './mobs';
 
-export type BiomeCategory =
-  "none"
-  | "taiga"
-  | "extreme_hills"
-  | "jungle"
-  | "mesa"
-  | "plains"
-  | "savanna"
-  | "icy"
-  | "the_end"
-  | "beach"
-  | "forest"
-  | "ocean"
-  | "desert"
-  | "river"
-  | "swamp"
-  | "mushroom"
-  | "nether";
 
+export const BiomeCategories = ["none", "taiga", "extreme_hills", "jungle", "mesa", "plains", "savanna"
+  , "icy", "the_end", "beach", "forest", "ocean", "desert", "river",
+  "swamp", "mushroom", "nether"] as const;
+export type BiomeCategory = typeof BiomeCategories[number];
 export type BiomeEffects = {
   fog_color: number;
   foliage_color: number;
@@ -53,37 +39,104 @@ export type SpawnerConfig = {
   minCount: number,
   maxCount: number
 }
+export const Precipitations = ['none', 'rain', 'snow'] as const;
+export type Precipitation = typeof Precipitations[number];
+
+export const TempModifiers = ["none", "frozen"] as const;
+export type TempModifier = typeof TempModifiers[number];
+export const SurfaceBuilders = [
+  "minecraft:badlands",
+  "minecraft:basalt_deltas",
+  "minecraft:crimson_forest",
+  "minecraft:desert",
+  "minecraft:end",
+  "minecraft:eroded_badlands",
+  "minecraft:frozen_ocean",
+  "minecraft:full_sand",
+  "minecraft:giant_tree_taiga",
+  "minecraft:grass",
+  "minecraft:gravelly_mountain",
+  "minecraft:ice_spikes",
+  "minecraft:mountain",
+  "minecraft:mycelium",
+  "minecraft:nether",
+  "minecraft:nope",
+  "minecraft:ocean_sand",
+  "minecraft:shattered_savanna",
+  "minecraft:soul_sand_valley",
+  "minecraft:stone",
+  "minecraft:swamp",
+  "minecraft:warped_forest",
+  "minecraft:wooded_badlands",
+] as const;
+export type SurfaceBuilder = typeof SurfaceBuilders[number];
+export const StructureFeatures = [
+  "minecraft:bastion_remnant",
+  "minecraft:buried_treasure",
+  "minecraft:desert_pyramid",
+  "minecraft:end_city",
+  "minecraft:fortress",
+  "minecraft:igloo",
+  "minecraft:jungle_pyramid",
+  "minecraft:mansion",
+  "minecraft:mineshaft",
+  "minecraft:mineshaft_mesa",
+  "minecraft:monument",
+  "minecraft:nether_fossil",
+  "minecraft:ocean_ruin_cold",
+  "minecraft:ocean_ruin_warm",
+  "minecraft:pillager_outpost",
+  "minecraft:ruined_portal",
+  "minecraft:ruined_portal_desert",
+  "minecraft:ruined_portal_jungle",
+  "minecraft:ruined_portal_mountain",
+  "minecraft:ruined_portal_nether",
+  "minecraft:ruined_portal_ocean",
+  "minecraft:ruined_portal_swamp",
+  "minecraft:shipwreck",
+  "minecraft:shipwreck_beached",
+  "minecraft:stronghold",
+  "minecraft:swamp_hut",
+  "minecraft:village_desert",
+  "minecraft:village_plains",
+  "minecraft:village_savanna",
+  "minecraft:village_snowy",
+  "minecraft:village_taiga",
+] as const;
+export type StructureFeature = typeof StructureFeatures[number]
+
 export interface Biome {
   /**
    * "none", "rain", or "snow"
    */
-  name:string;
-  precipitation: "none" | "rain" | "snow";
-  category: BiomeCategory;
+  name: string;
+  id: number;
+  precipitation: Precipitation | string;
+  category: BiomeCategory | string;
   depth: number;
   scale: number;
   temperature: number;
-  temperature_modifier: "none" | "frozen";
+  temperature_modifier: TempModifier | string;
   downfall: number;
   effects: BiomeEffects;
-  surface_builder: string;
-  carvers: {
-    air?: string[],
-    liquid?: string[]
+  surface_builder: SurfaceBuilder | string;
+  carvers?: {
+    air: string[],
+    liquid: string[]
   }
-  features: FeaturesType[][];
-  starts: string[];
+  features: [FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[]];
+  starts: StructureFeature[];
   spawners: {
-    monster?: SpawnerConfig[];
-    creature?: SpawnerConfig[];
-    ambient?: SpawnerConfig[];
-    water_creature?: SpawnerConfig[];
-    water_ambient?: SpawnerConfig;
-    misc?: SpawnerConfig;
+    monster: SpawnerConfig[];
+    creature: SpawnerConfig[];
+    ambient: SpawnerConfig[];
+    water_creature: SpawnerConfig[];
+    water_ambient: SpawnerConfig[];
+    misc: SpawnerConfig[];
   }
   player_spawn_friendly: boolean;
   creature_spawn_probability: number;
-  parent: BiomesType | string;
+  parent?: BiomesType | string;
   spawn_costs: {
     [key: string]: {
       energy_budget: number;

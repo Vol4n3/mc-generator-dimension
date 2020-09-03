@@ -1,7 +1,7 @@
 import {FC, InputHTMLAttributes} from 'react';
 import styled from 'styled-components';
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const StyledInput = styled.input`
@@ -11,7 +11,5 @@ const StyledInput = styled.input`
 `;
 export const Input: FC<InputProps> = props => {
   const {children, ...rest} = props;
-  return <>
-    <StyledInput {...rest}/>
-  </>
+  return <StyledInput {...rest}/>
 }

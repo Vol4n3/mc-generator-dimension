@@ -10,12 +10,14 @@ import {
 } from '../../interface/dimension';
 import {LabelWrapper} from '../label-wrapper';
 import {Select} from '../select/select';
-import {Input} from '../input';
 import {generateRandFloat, parseInput} from '../../utils/math.utils';
 import {Button} from '../button';
-import {TagCloud} from '../tag-cloud';
 import {MultiNoiseParamsForm} from './multi-noise-params.form';
 import {BiomeSettingsForm} from './biome-settings.form';
+import {InputLabel} from '../input/input-label';
+import {InputCheckboxLabel} from '../input/input-checkbox-label';
+import {MultiSelect} from '../multi-select/multi-select';
+import {biomes} from '../../interface/biome';
 
 type BiomeSourcePossible =
   BiomeSourceTheEnd
@@ -27,6 +29,7 @@ type BiomeSourcePossible =
 interface BiomeSourceProps {
   biomeSource: BiomeSourcePossible;
   onChange: (bs: BiomeSourcePossible) => void;
+  customBiomes: string[];
 }
 
 const biomesTypes = [
@@ -37,8 +40,7 @@ const biomesTypes = [
   , "minecraft:the_end"
 ];
 export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
-  const {biomeSource, onChange} = props;
-  const [getCheckerBiomeInput, setCheckerBiomeInput] = useState<string>('');
+  const {biomeSource, onChange,customBiomes} = props;
   const [getId, setId] = useState<number>(1);
   const emitChangeBST = (value: string) => {
     const bst = value as BiomeSourceType;
@@ -82,12 +84,12 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
     } as BiomeSourcePossible)
   }
   return <>
-    <LabelWrapper label={'Biome source seed'}>
-      <Input type={'number'}
-             value={biomeSource.seed}
-             required
-             onChange={e => onChange({...biomeSource, seed: parseInt(e.target.value)})}/>
-    </LabelWrapper>
+    <InputLabel
+      label={'Biome source seed'}
+      type={'number'}
+      value={biomeSource.seed}
+      required
+      onChange={e => onChange({...biomeSource, seed: parseInt(e.target.value)})}/>
     <LabelWrapper label={'Biome source type'} caption={"The type of biome generation"}>
       <Select
         onSelected={emitChangeBST}
@@ -106,7 +108,7 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
             onChange(
               {
                 ...biomeSource,
-                biomes: [ {
+                biomes: [{
                   biome: '',
                   id: getId,
                   parameters: {
@@ -116,7 +118,7 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
                     temperature: generateRandFloat(),
                     weirdness: generateRandFloat()
                   }
-                },...(biomeSource as BiomeSourceMultiNoise).biomes]
+                }, ...(biomeSource as BiomeSourceMultiNoise).biomes]
               });
             setId(getId + 1);
           }}>
@@ -126,12 +128,12 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
           <BiomeSettingsForm
             key={b.id}
             onChange={
-            e => onChange({
-              ...biomeSource,
-              biomes: (biomeSource as BiomeSourceMultiNoise).biomes.map(
-                (item, i) => i === index ? e : item)
-            })
-          } value={b}
+              e => onChange({
+                ...biomeSource,
+                biomes: (biomeSource as BiomeSourceMultiNoise).biomes.map(
+                  (item, i) => i === index ? e : item)
+              })
+            } value={b}
             onClose={() => {
               onChange({
                 ...biomeSource, biomes: (biomeSource as BiomeSourceMultiNoise).biomes.filter(
@@ -163,26 +165,18 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
     {
       biomeSource.type === 'minecraft:vanilla_layered' && <div>
         Vanilla layered : Default and large biome generation used in the overworld
-        <LabelWrapper
-          caption={'Whether the biomes are large. True for biomes generation in the "Large Biomes" world type.'}>
-          <label>
-            <Input type={'checkbox'}
-                   value={'large_biome'}
-                   checked={(biomeSource as BiomeSourceVanillaLayered).large_biomes}
-                   onChange={e => onChange({...biomeSource, large_biomes: e.target.checked})}/>
-            <span>Large Biome</span>
-          </label>
-        </LabelWrapper>
-        <LabelWrapper
-          caption={'Whether the world was default_1_1'}>
-          <label>
-            <Input type={'checkbox'}
-                   value={'large_biome'}
-                   checked={(biomeSource as BiomeSourceVanillaLayered).legacy_biome_init_layer}
-                   onChange={e => onChange({...biomeSource, legacy_biome_init_layer: e.target.checked})}/>
-            <span>legacy_biome_init_layer</span>
-          </label>
-        </LabelWrapper>
+        <InputCheckboxLabel
+          label={"Large Biome"}
+          caption={'Whether the biomes are large. True for biomes generation in the "Large Biomes" world type.'}
+          onChange={e => onChange({...biomeSource, large_biomes: e})}
+          value={(biomeSource as BiomeSourceVanillaLayered).large_biomes}>
+        </InputCheckboxLabel>
+        <InputCheckboxLabel
+          label={"legacy_biome_init_layer"}
+          caption={'Whether the world was default_1_1'}
+          onChange={e => onChange({...biomeSource, legacy_biome_init_layer: e})}
+          value={(biomeSource as BiomeSourceVanillaLayered).legacy_biome_init_layer}>
+        </InputCheckboxLabel>
       </div>
     }
     {
@@ -194,53 +188,31 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
     {
       biomeSource.type === 'minecraft:fixed' && <div>
         A single biome
-        <LabelWrapper label={"Biome"}>
-          <Input type={'text'}
-                 required
-                 list={'biomes'}
-                 value={(biomeSource as BiomeSourceFixed).biome}
-                 onChange={e => onChange({...biomeSource, biome: e.target.value})}/>
-        </LabelWrapper>
+        <InputLabel
+          label={"Biome"}
+          type={'text'}
+          required
+          list={'biomes'}
+          value={(biomeSource as BiomeSourceFixed).biome}
+          onChange={e => onChange({...biomeSource, biome: e.target.value})}/>
       </div>
     }
     {
       biomeSource.type === 'minecraft:checkerboard' && <div>
         Checkerboard: A biome generation in which biomes are square (or close to square) and repeat along the diagonals.
-        <LabelWrapper label={'scale'} caption={'Determines the size of the squares on an exponential scale.'}>
-          <Input
-            type={'number'}
-            value={(biomeSource as BiomeSourceCheckerboard).scale}
-            onChange={e => onChange({...biomeSource, scale: parseInput(e.target.value, 1)})}
-            required
-          />
-        </LabelWrapper>
-        <LabelWrapper>
-          <Input
-            type={'text'}
-            list={'biomes'}
-            value={getCheckerBiomeInput}
-            onChange={(e) => setCheckerBiomeInput(e.target.value)}/>
-          <Button
-            onClick={() => {
-              getCheckerBiomeInput &&
-              !(biomeSource as BiomeSourceCheckerboard).biomes.some((item) => getCheckerBiomeInput === item) &&
-              onChange({
-                ...biomeSource,
-                biomes:
-                  [
-                    ...(biomeSource as BiomeSourceCheckerboard).biomes,
-                    getCheckerBiomeInput
-                  ]
-              } as BiomeSourceCheckerboard);
-              setCheckerBiomeInput('');
-            }}>
-            Add
-          </Button>
-          <hr/>
-          <TagCloud
-            value={(biomeSource as BiomeSourceCheckerboard).biomes}
-            onChange={(val) => onChange({...biomeSource, biomes: val} as BiomeSourceCheckerboard)}/>
-        </LabelWrapper>
+        <InputLabel
+          label={'scale'}
+          caption={'Determines the size of the squares on an exponential scale.'}
+          type={'number'}
+          value={(biomeSource as BiomeSourceCheckerboard).scale}
+          onChange={e => onChange({...biomeSource, scale: parseInput(e.target.value, 1)})}
+          required
+        />
+        <MultiSelect
+          label={'ajouter un biome'}
+          values={(biomeSource as BiomeSourceCheckerboard).biomes}
+          options={[...customBiomes,...biomes].map(item => ({value: item, label: item}))}
+          onChange={value => onChange({...biomeSource, biomes: value})}/>
       </div>
     }
   </>

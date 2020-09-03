@@ -4,8 +4,6 @@ import {Button} from '../../../components/button';
 import {DimensionForm} from '../../../components/forms';
 import {MinecraftDimensionTypes} from '../../../interface/dimension-type';
 import {exportFiles} from '../../../utils/export-zip';
-import {LabelWrapper} from '../../../components/label-wrapper';
-import {Input} from '../../../components/input';
 import {Flex} from '../../../components/flex';
 import {generateSeed} from '../../../utils/math.utils';
 import styled from 'styled-components';
@@ -13,6 +11,9 @@ import {MainTemplate} from '../../../components/template/main.template';
 import {biomes} from '../../../interface/biome';
 import {noiseSettingsDefault} from '../../../interface/noise-settings';
 import {DimensionTypeForm} from '../../../components/forms/dimension-type.form';
+import {BiomeForm} from '../../../components/forms/biome.form';
+import {removeItemInArray, updateItemInArray, updateItemInObject} from '../../../utils/object.manipulation';
+import {InputLabel} from '../../../components/input/input-label';
 
 const ExtendedDiv = styled.div`
 width: 100%;
@@ -31,15 +32,56 @@ const DimensionsPage = () => {
     event.preventDefault();
     exportFiles(getData);
   }
+  const createBiome = () => {
+    setData({
+      ...getData,
+      biomes: [
+        {
+          id: getId,
+          name: '',
+          depth: 0.2,
+          precipitation: 'none',
+          category: 'none',
+          creature_spawn_probability: 1,
+          player_spawn_friendly: false,
+          downfall: 0.8,
+          scale: 0.4,
+          surface_builder: 'minecraft:grass',
+          temperature: 2,
+          temperature_modifier: 'none',
+          starts: [],
+          features: [[], [], [], [], [], [], [], [], [], []],
+          spawn_costs: {},
+          effects:{
+            fog_color: 0,
+            foliage_color: 0,
+            grass_color: 0,
+            sky_color: 0,
+            water_color:0,
+            water_fog_color:0,
+            grass_color_modifier: 'none',
+          },
+          spawners: {
+            ambient: [],
+            creature: [],
+            misc: [],
+            monster: [],
+            water_ambient: [],
+            water_creature: []
+          }
+        }
+        , ...getData.biomes
+      ]
+    })
+    setId(getId + 1);
+  }
   const createDimensionType = () => {
-    const currentId = getId;
-    setId(currentId + 1);
     setData({
       ...getData,
       dimensionType: [
         ...getData.dimensionType,
         {
-          id: currentId,
+          id: getId,
           name: '',
           ambient_light: 0.5,
           bed_works: true,
@@ -55,16 +97,15 @@ const DimensionsPage = () => {
           respawn_anchor_works: true
         }
       ]
-    })
+    });
+    setId(getId + 1);
   }
   const createDimension = () => {
-    const currentId = getId;
-    setId(currentId + 1);
     setData({
       ...getData,
       dimensions: [
         {
-          id: currentId,
+          id: getId,
           name: '',
           type: '',
           generator: {
@@ -74,36 +115,38 @@ const DimensionsPage = () => {
         },
         ...getData.dimensions
       ]
-    })
+    });
+    setId(getId + 1);
   };
-
+  const updateInData = (key: keyof Data, index: number, value: any) => {
+    setData(
+      updateItemInObject<Data>(getData, key,
+        updateItemInArray<keyof Data>(getData[key] as any[], index, value)));
+  }
+  const removeInData = (key: keyof Data, index: number) => {
+    setData(
+      updateItemInObject<Data>(getData, key,
+        removeItemInArray<keyof Data>(getData[key] as any[], index)));
+  }
   return <MainTemplate title={'Minecraft Generator dimension 1.16.2'}>
     <form onSubmit={submitData}>
-      <LabelWrapper label={'Namespace'} caption={'Namespace'}>
-        <Input
-          required
-          value={getData.namespace}
-          onChange={(ev) => setData({...getData, namespace: ev.target.value})}/>
-      </LabelWrapper>
+      <InputLabel
+        label={'Namespace'}
+        caption={'Namespace is used to found custom dimension , dimension_type , noise_settings or biomes'}
+        required
+        value={getData.namespace}
+        onChange={(ev) => setData({...getData, namespace: ev.target.value})}/>
       <Flex>
         <Flex col={[12, 12, 3]}>
           <ExtendedDiv>
             <Button onClick={() => createDimension()}>Add dimension</Button>
             {getData.dimensions.map((dim, index) => {
               return <DimensionForm
-                onRemove={() => setData({
-                  ...getData, dimensions: [
-                    ...getData.dimensions.filter((_, i) => i !== index),
-                  ]
-                })}
+                onRemove={() => removeInData('dimensions', index)}
                 key={dim.id}
                 dimension={dim}
-                onChange={(d) => setData({
-                  ...getData,
-                  dimensions: [
-                    ...getData.dimensions.map((dim, i) => i === index ? d : dim),
-                  ]
-                })}
+                customBiomes={getData.biomes.map(b => `${getData.namespace}:${b.name}`)}
+                onChange={value => updateInData('dimensions', index, value)}
               />
             })}
           </ExtendedDiv>
@@ -111,23 +154,13 @@ const DimensionsPage = () => {
         <Flex col={[12, 12, 3]}>
           <ExtendedDiv>
             <Button onClick={() => createDimensionType()}>Add dimension type</Button>
-            {getData.dimensionType.map((dim, index) => {
-              return <DimensionTypeForm
-                onRemove={() => setData({
-                  ...getData, dimensionType: [
-                    ...getData.dimensionType.filter((_, i) => i !== index),
-                  ]
-                })}
+            {getData.dimensionType.map((dim, index) =>
+              <DimensionTypeForm
+                onRemove={() => removeInData('dimensionType', index)}
                 key={dim.id}
                 dimensionType={dim}
-                onChange={(dt) => setData({
-                  ...getData,
-                  dimensionType: [
-                    ...getData.dimensionType.map((dim, i) => i === index ? dt : dim),
-                  ]
-                })}
-              />
-            })}
+                onChange={value => updateInData('dimensionType', index, value)}
+              />)}
           </ExtendedDiv>
         </Flex>
         <Flex col={[12, 12, 3]}>
@@ -137,7 +170,12 @@ const DimensionsPage = () => {
         </Flex>
         <Flex col={[12, 12, 3]}>
           <ExtendedDiv>
-            <Button>Add biome</Button>
+            <Button onClick={createBiome}>Add biome</Button>
+            {getData.biomes.map((biome, index) => <BiomeForm
+              key={biome.id}
+              biome={biome}
+              onClose={() => removeInData('biomes', index)}
+              onChange={(value) => updateInData('biomes', index, value)}/>)}
           </ExtendedDiv>
         </Flex>
       </Flex>
