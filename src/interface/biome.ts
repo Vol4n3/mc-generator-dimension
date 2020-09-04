@@ -1,4 +1,4 @@
-import {FeaturesType} from './features';
+import {BiomeFeature} from './biome-features';
 import {MobsType} from './mobs';
 
 
@@ -6,6 +6,8 @@ export const BiomeCategories = ["none", "taiga", "extreme_hills", "jungle", "mes
   , "icy", "the_end", "beach", "forest", "ocean", "desert", "river",
   "swamp", "mushroom", "nether"] as const;
 export type BiomeCategory = typeof BiomeCategories[number];
+export const GrassColorModifiers = ["none", "dark_forest", "swamp"];
+export type GrassColorModifier = typeof GrassColorModifiers[number];
 export type BiomeEffects = {
   fog_color: number;
   foliage_color: number;
@@ -13,8 +15,17 @@ export type BiomeEffects = {
   sky_color: number;
   water_color: number;
   water_fog_color: number;
-  grass_color_modifier: "none" | "dark_forest" | "swamp";
-  particle?: {}
+  grass_color_modifier: GrassColorModifier;
+  particle?: {
+    probability: number,
+    options: {
+      type: string;
+      r?: number;
+      g?: number;
+      b?: number;
+      scale?: number;
+    }
+  }
   ambient_sound?: string;
   mood_sound?: {
     sound: string;
@@ -105,6 +116,13 @@ export const StructureFeatures = [
 ] as const;
 export type StructureFeature = typeof StructureFeatures[number]
 
+export interface BiomeCarvers {
+  air: string[],
+  liquid: string[]
+}
+
+export type BiomeFeaturesLevel = [BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[]];
+
 export interface Biome {
   /**
    * "none", "rain", or "snow"
@@ -120,11 +138,8 @@ export interface Biome {
   downfall: number;
   effects: BiomeEffects;
   surface_builder: SurfaceBuilder | string;
-  carvers?: {
-    air: string[],
-    liquid: string[]
-  }
-  features: [FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[], FeaturesType[]];
+  carvers: BiomeCarvers;
+  features: BiomeFeaturesLevel;
   starts: StructureFeature[];
   spawners: {
     monster: SpawnerConfig[];

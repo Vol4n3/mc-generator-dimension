@@ -2,7 +2,6 @@ import {FC, useState} from 'react';
 import {LabelWrapper, LabelWrapperProps} from '../label-wrapper';
 import {Select} from '../select/select';
 import {Option} from '../../interface/ui';
-import {Flex} from '../flex';
 import {TagCloud} from '../tag-cloud';
 
 interface MultiSelectProps extends LabelWrapperProps {
@@ -22,15 +21,14 @@ export const MultiSelect: FC<MultiSelectProps> = props => {
     }
   }
   return <LabelWrapper label={label} caption={caption}>
-    <Flex>
-        <Select
-          options={options.filter(item => !values.some(compare => item.value === compare))}
-          value={getSelected}
-          onSelected={(value) => emitAdd(value)}/>
-    </Flex>
-    <hr/>
-    <TagCloud
-      value={values}
-      onChange={(val) => onChange(val)}/>
+    <Select
+      options={options.filter(item => !values.some(compare => item.value === compare))}
+      value={getSelected}
+      onSelected={(value) => emitAdd(value)}/>
+    <LabelWrapper>
+      <TagCloud
+        value={values}
+        onChange={(val) => onChange(val)}/>
+    </LabelWrapper>
   </LabelWrapper>
 }

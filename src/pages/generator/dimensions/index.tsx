@@ -8,7 +8,7 @@ import {Flex} from '../../../components/flex';
 import {generateSeed} from '../../../utils/math.utils';
 import styled from 'styled-components';
 import {MainTemplate} from '../../../components/template/main.template';
-import {biomes} from '../../../interface/biome';
+import {biomes, SurfaceBuilders} from '../../../interface/biome';
 import {noiseSettingsDefault} from '../../../interface/noise-settings';
 import {DimensionTypeForm} from '../../../components/forms/dimension-type.form';
 import {BiomeForm} from '../../../components/forms/biome.form';
@@ -52,14 +52,17 @@ const DimensionsPage = () => {
           starts: [],
           features: [[], [], [], [], [], [], [], [], [], []],
           spawn_costs: {},
-          effects:{
+          effects: {
             fog_color: 0,
             foliage_color: 0,
             grass_color: 0,
             sky_color: 0,
-            water_color:0,
-            water_fog_color:0,
+            water_color: 0,
+            water_fog_color: 0,
             grass_color_modifier: 'none',
+          },
+          carvers: {
+            air: [], liquid: []
           },
           spawners: {
             ambient: [],
@@ -193,6 +196,10 @@ const DimensionsPage = () => {
     <datalist id={'dimension_type'}>
       {[...MinecraftDimensionTypes, ...getData.dimensionType.map(dt => `${getData.namespace}:${dt.name}`)].map(dtn =>
         <option key={dtn} value={dtn}/>)}
+    </datalist>
+    <datalist id={'surface_builders'}>
+      {[...SurfaceBuilders].map(sb =>
+        <option key={sb} value={sb}/>)}
     </datalist>
   </MainTemplate>
 }

@@ -5,6 +5,9 @@ import {
   BiomeCategory,
   Precipitation,
   Precipitations,
+  StructureFeature,
+  StructureFeatures,
+  SurfaceBuilders,
   TempModifier,
   TempModifiers
 } from '../../interface/biome';
@@ -14,6 +17,10 @@ import {Select} from '../select/select';
 import {InputLabel} from '../input/input-label';
 import {parseInput} from '../../utils/math.utils';
 import {BiomeEffectForm} from './biome-effect.form';
+import {BiomeCarversForm} from './biome-carvers.form';
+import {BiomeFeaturesForm} from './biome-features.form';
+import {MultiSelect} from '../multi-select/multi-select';
+import {InputCheckboxLabel} from '../input/input-checkbox-label';
 
 interface BiomeFormsProps {
   biome: Biome;
@@ -27,6 +34,7 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
     <InputLabel
       label={'Biome Name'}
       value={biome.name}
+      required
       onChange={e => onChange({...biome, name: e.target.value})}
     />
     <LabelWrapper
@@ -55,7 +63,7 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
       type={'number'}
       value={biome.depth}
       required
-      onChange={e=>onChange({...biome,depth:parseInput(e.target.value)})}
+      onChange={e => onChange({...biome, depth: parseInput(e.target.value)})}
     />
     <InputLabel
       label={'scale'}
@@ -63,7 +71,7 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
       type={'number'}
       value={biome.scale}
       required
-      onChange={e=>onChange({...biome,scale:parseInput(e.target.value)})}
+      onChange={e => onChange({...biome, scale: parseInput(e.target.value)})}
     />
     <InputLabel
       label={'temperature'}
@@ -71,7 +79,7 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
       type={'number'}
       value={biome.temperature}
       required
-      onChange={e=>onChange({...biome,temperature:parseInput(e.target.value)})}
+      onChange={e => onChange({...biome, temperature: parseInput(e.target.value)})}
     />
     <LabelWrapper
       label={'temperature_modifier'}>
@@ -87,9 +95,35 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
       type={'number'}
       value={biome.downfall}
       required
-      onChange={e=>onChange({...biome,downfall:parseInput(e.target.value)})}
+      onChange={e => onChange({...biome, downfall: parseInput(e.target.value)})}
     />
-    <BiomeEffectForm biomeEffects={biome.effects} onChange={()=>{}}/>
-
+    <BiomeEffectForm biomeEffects={biome.effects} onChange={(biomeEffects) => {
+      onChange({...biome, effects: biomeEffects})
+    }}/>
+    <LabelWrapper
+      label={'surface_builder'}
+      caption={'The namespaced id of the configured surface builder to use.'}>
+      <Select
+        options={SurfaceBuilders.map(item => ({value: item, label: item}))}
+        onSelected={(v) => onChange({...biome, surface_builder: v})}
+        required/>
+    </LabelWrapper>
+    <BiomeCarversForm carvers={biome.carvers} onChange={bc => onChange({...biome, carvers: bc})}/>
+    <BiomeFeaturesForm biomeFeatures={biome.features} onChange={bf => onChange({...biome, features: bf})}/>
+    <MultiSelect label={'starts'} caption={'The structures to generate in this biome.'} values={biome.starts}
+                 options={StructureFeatures.map(item => ({value: item, label: item}))}
+                 onChange={values => onChange({...biome, starts: values as StructureFeature[]})}/>
+    {/* todo: spawner here*/}
+    <InputCheckboxLabel
+      label={'player_spawn_friendly'} onChange={e => onChange({...biome, player_spawn_friendly: e})}
+      value={biome.player_spawn_friendly}/>
+    <InputLabel
+      label={'creature_spawn_probability'}
+      caption={'Spawns passive mobs as long as random value is less than this. Must be between 0 and 1.'}
+      value={biome.creature_spawn_probability}
+      onChange={event => onChange({...biome, creature_spawn_probability: parseInput(event.target.value, 0, 1)})}
+      type={'number'}/>
+    {/* todo: Optional parent*/}
+    {/*Spawn cost*/}
   </Card>
 }

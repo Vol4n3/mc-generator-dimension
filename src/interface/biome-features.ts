@@ -1,14 +1,14 @@
-export const features = [
-"minecraft:acacia",
-"minecraft:bamboo",
-"minecraft:bamboo_light",
-"minecraft:bamboo_vegetation",
-"minecraft:basalt_blobs",
-"minecraft:basalt_pillar",
-"minecraft:birch",
-"minecraft:birch_bees_0002",
-"minecraft:birch_bees_002",
-"minecraft:birch_bees_005",
+export const BiomeFeatures = [
+  "minecraft:acacia",
+  "minecraft:bamboo",
+  "minecraft:bamboo_light",
+  "minecraft:bamboo_vegetation",
+  "minecraft:basalt_blobs",
+  "minecraft:basalt_pillar",
+  "minecraft:birch",
+  "minecraft:birch_bees_0002",
+  "minecraft:birch_bees_002",
+  "minecraft:birch_bees_005",
 "minecraft:birch_other",
 "minecraft:birch_tall",
 "minecraft:blackstone_blobs",
@@ -191,4 +191,4 @@ export const features = [
 "minecraft:warped_fungi_planted",
 "minecraft:weeping_vines",
 ] as const;
-export type FeaturesType = typeof features[number];
+export type BiomeFeature = typeof BiomeFeatures[number];

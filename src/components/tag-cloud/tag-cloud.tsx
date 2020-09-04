@@ -12,7 +12,7 @@ export const TagCloud: FC<TagCloudProps> = props => {
   const emitChange = (index: number) => {
     onChange(value.filter((_, i) => i !== index))
   }
-  return <Flex alignItems={['center']} justifyContent={['space-between']}>
+  return <Flex alignItems={['center']}>
     {value.map((item, index) => <Tag onClose={() => emitChange(index)} key={item} label={item}/>)}
   </Flex>
 }

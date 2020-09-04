@@ -1,5 +1,5 @@
 import {Structures} from './structures';
-import {FeaturesType} from './features';
+import {BiomeFeature} from './biome-features';
 import {BlocksType} from './blocks';
 import {BiomesType} from './biome';
 
@@ -74,7 +74,7 @@ export interface FlatSettings {
   layers: { height: number, block: BlocksType }[];
   biome: BiomesType | string;
   lakes?: boolean;
-  features?: FeaturesType[][];
+  features?: BiomeFeature[][];
   structures: Structures;
 }
 

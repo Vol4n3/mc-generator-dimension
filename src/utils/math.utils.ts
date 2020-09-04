@@ -1,12 +1,17 @@
 export const generateSeed = (): number => {
   return Math.round((Math.random() * 2 - 1) * Math.pow(2, 32));
 }
-
-export const generateRandFloat = (decimal: number = 100)=>{
+export const intToHexaColor = (n: number): string => {
+  return '#' + (n).toString(16).padStart(6, '0')
+};
+export const parseColor = (color: string): number => {
+  return parseInt(color.replace('#', ''), 16);
+}
+export const generateRandFloat = (decimal: number = 100) => {
   return Math.round((Math.random() * 2 - 1) * decimal) / decimal;
 }
 export const parseSeed = (value: string): number => {
-  return parseInput(value,-Math.pow(2, 32),Math.pow(2, 32))
+  return parseInput(value, -Math.pow(2, 32), Math.pow(2, 32))
 }
 export const parseInput = (value: string, min?: number, max?: number): number => {
   const result = parseInt(value, 10);
