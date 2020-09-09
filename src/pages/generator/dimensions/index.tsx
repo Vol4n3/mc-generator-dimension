@@ -4,7 +4,6 @@ import {Button} from '../../../components/button';
 import {DimensionForm} from '../../../components/forms';
 import {MinecraftDimensionTypes} from '../../../interface/dimension-type';
 import {exportFiles} from '../../../utils/export-zip';
-import {Flex} from '../../../components/flex';
 import {generateSeed} from '../../../utils/math.utils';
 import styled from 'styled-components';
 import {MainTemplate} from '../../../components/template/main.template';
@@ -14,6 +13,9 @@ import {DimensionTypeForm} from '../../../components/forms/dimension-type.form';
 import {BiomeForm} from '../../../components/forms/biome.form';
 import {removeItemInArray, updateItemInArray, updateItemInObject} from '../../../utils/object.manipulation';
 import {InputLabel} from '../../../components/input/input-label';
+import {NavTabBar} from '../../../components/tab/nav-tab-bar';
+import {Animation, Keyframes} from '../../../components/animation';
+import {Flex} from '../../../components/flex';
 
 const ExtendedDiv = styled.div`
 width: 100%;
@@ -27,6 +29,7 @@ const DimensionsPage = () => {
     noiseSettings: [],
     biomes: []
   });
+  const [getSelectedTab,setSelectedTab] = useState<number>(0)
   const [getId, setId] = useState<number>(1);
   const submitData = (event: FormEvent) => {
     event.preventDefault();
@@ -139,10 +142,12 @@ const DimensionsPage = () => {
         required
         value={getData.namespace}
         onChange={(ev) => setData({...getData, namespace: ev.target.value})}/>
-      <Flex>
-        <Flex col={[12, 12, 3]}>
+        <NavTabBar tabs={['Dimension','Dimension Type','Noise settings','Biome']} selectedTabs={getSelectedTab} onChange={(value)=>{setSelectedTab(value)}}/>
+        <Animation show={getSelectedTab === 0} onStarting enter={{keyframes: Keyframes.fadeIn,delay: 250}} exit={{keyframes: Keyframes.fadeOut}}>
           <ExtendedDiv>
-            <Button onClick={() => createDimension()}>Add dimension</Button>
+            <Flex justifyContent={['flex-end']}>
+              <Button style={{marginTop:'10px'}} onClick={() => createDimension()}>Add dimension</Button>
+            </Flex>
             {getData.dimensions.map((dim, index) => {
               return <DimensionForm
                 onRemove={() => removeInData('dimensions', index)}
@@ -153,10 +158,12 @@ const DimensionsPage = () => {
               />
             })}
           </ExtendedDiv>
-        </Flex>
-        <Flex col={[12, 12, 3]}>
+        </Animation>
+        <Animation show={getSelectedTab === 1} onStarting enter={{keyframes: Keyframes.fadeIn,delay: 250}} exit={{keyframes: Keyframes.fadeOut}}>
           <ExtendedDiv>
-            <Button onClick={() => createDimensionType()}>Add dimension type</Button>
+            <Flex justifyContent={['flex-end']}>
+              <Button onClick={() => createDimensionType()} style={{marginTop: '10px'}}>Add dimension type</Button>
+            </Flex>
             {getData.dimensionType.map((dim, index) =>
               <DimensionTypeForm
                 onRemove={() => removeInData('dimensionType', index)}
@@ -165,28 +172,31 @@ const DimensionsPage = () => {
                 onChange={value => updateInData('dimensionType', index, value)}
               />)}
           </ExtendedDiv>
-        </Flex>
-        <Flex col={[12, 12, 3]}>
+        </Animation>
+        <Animation show={getSelectedTab === 2} onStarting enter={{keyframes: Keyframes.fadeIn,delay: 250}} exit={{keyframes: Keyframes.fadeOut}}>
           <ExtendedDiv>
-            <Button>Add noise settings</Button>
+            <Flex justifyContent={['flex-end']}>
+              <Button style={{marginTop: '10px'}}>Add noise settings</Button>
+            </Flex>
           </ExtendedDiv>
-        </Flex>
-        <Flex col={[12, 12, 3]}>
+        </Animation>
+        <Animation show={getSelectedTab === 3} onStarting enter={{keyframes: Keyframes.fadeIn,delay: 250}} exit={{keyframes: Keyframes.fadeOut}}>
           <ExtendedDiv>
-            <Button onClick={createBiome}>Add biome</Button>
+            <Flex justifyContent={['flex-end']}>
+              <Button style={{marginTop: '10px'}} onClick={createBiome}>Add biome</Button>
+            </Flex>
             {getData.biomes.map((biome, index) => <BiomeForm
               key={biome.id}
               biome={biome}
               onClose={() => removeInData('biomes', index)}
               onChange={(value) => updateInData('biomes', index, value)}/>)}
           </ExtendedDiv>
-        </Flex>
-      </Flex>
+        </Animation>
       <hr style={{marginTop: '50px'}}/>
       <Button type={'submit'}>Export</Button>
     </form>
     <datalist id={'biomes'}>
-      {[...biomes, ...getData.biomes.map(b => `${getData.namespace}:${b.name}`)].map((b) => <option key={b}
+      {[...biomes, ...getData.biomes.map(b => `${getData.namespace}:${b.name}`)].map((b,i) => <option key={b+i}
                                                                                                     value={b}/>)}
     </datalist>
     <datalist id={'noise_settings'}>

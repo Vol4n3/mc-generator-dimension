@@ -1,4 +1,4 @@
-import {FC, SelectHTMLAttributes, useState} from 'react';
+import {FC, SelectHTMLAttributes,  useState} from 'react';
 import {Option} from '../../interface/ui';
 import styled from 'styled-components';
 import {Flex} from '../flex';
@@ -19,7 +19,7 @@ export const Select: FC<SelectProps> = props => {
     return options.filter(item => filter ? item.label.search(filter) !== -1 : true)
   };
   return <Flex>
-    <Flex noPadding col={[6]}>
+    <Flex noPadding col={[8]}>
       <SelectStyled {...rest as any}
                     onChange={e => onSelected(e.target.value)}>
         <option value={''}>--None--</option>
@@ -29,11 +29,10 @@ export const Select: FC<SelectProps> = props => {
           {d.label}
         </option>)}
       </SelectStyled></Flex>
-    <Flex col={[6]} noPadding>
+    <Flex col={[4]} noPadding>
       <Input value={getFilter} placeholder={'filter'} onChange={event => {
         setFilter(event.target.value);
       }}/>
     </Flex>
-
   </Flex>
 }

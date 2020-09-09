@@ -30,7 +30,7 @@ interface BiomeFormsProps {
 
 export const BiomeForm: FC<BiomeFormsProps> = props => {
   const {onClose, biome, onChange} = props;
-  return <Card bgColor={'#ccf'} onClose={onClose}>
+  return <Card bgColor={'#eef'} onClose={onClose}>
     <InputLabel
       label={'Biome Name'}
       value={biome.name}

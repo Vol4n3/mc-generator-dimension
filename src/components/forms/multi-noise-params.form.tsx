@@ -43,6 +43,5 @@ export const MultiNoiseParamsForm: FC<MultiNoiseParamsFormParams> = props => {
         </Flex>
       </Flex>
     </LabelWrapper>
-
   </Wrapper>
 };

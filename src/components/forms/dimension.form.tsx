@@ -51,7 +51,7 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
     onChange({...dimension, generator});
 
   }
-  return <Card onClose={onRemove} bgColor={'#cdc'}>
+  return <Card onClose={onRemove} bgColor={'#efe'}>
       <InputLabel
         label={'Dimension Name'}
         value={dimension.name || ''}

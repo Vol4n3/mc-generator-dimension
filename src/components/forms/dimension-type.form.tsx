@@ -16,7 +16,7 @@ export interface DimensionTypeFormProps {
 
 export const DimensionTypeForm: FC<DimensionTypeFormProps> = props => {
   const {dimensionType, onChange, onRemove} = props;
-  return <Card onClose={onRemove} bgColor={'#aee'}>
+  return <Card onClose={onRemove} bgColor={'#dff'}>
     <InputLabel
       label={"Name"}
       type={'text'}

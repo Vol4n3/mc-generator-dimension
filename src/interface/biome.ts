@@ -123,6 +123,16 @@ export interface BiomeCarvers {
 
 export type BiomeFeaturesLevel = [BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[]];
 
+export interface BiomeSpawners
+{
+  monster: SpawnerConfig[];
+  creature: SpawnerConfig[];
+  ambient: SpawnerConfig[];
+  water_creature: SpawnerConfig[];
+  water_ambient: SpawnerConfig[];
+  misc: SpawnerConfig[];
+}
+
 export interface Biome {
   /**
    * "none", "rain", or "snow"
@@ -141,14 +151,7 @@ export interface Biome {
   carvers: BiomeCarvers;
   features: BiomeFeaturesLevel;
   starts: StructureFeature[];
-  spawners: {
-    monster: SpawnerConfig[];
-    creature: SpawnerConfig[];
-    ambient: SpawnerConfig[];
-    water_creature: SpawnerConfig[];
-    water_ambient: SpawnerConfig[];
-    misc: SpawnerConfig[];
-  }
+  spawners: BiomeSpawners;
   player_spawn_friendly: boolean;
   creature_spawn_probability: number;
   parent?: BiomesType | string;
