@@ -1,12 +1,12 @@
 import {FC} from 'react';
-import {DimensionType} from '../../interface/dimension-type';
-import {Card} from '../card/card';
-import {LabelWrapper} from '../label-wrapper';
-import {Input} from '../input';
-import {parseInput} from '../../utils/math.utils';
-import {Select} from '../select/select';
-import {InputLabel} from '../input/input-label';
-import {InputCheckboxLabel} from '../input/input-checkbox-label';
+import {DimensionType} from '../../../interface/dimension-type';
+import {Card} from '../../card/card';
+import {LabelWrapper} from '../../label-wrapper';
+import {Input} from '../../input';
+import {parseInput} from '../../../utils/math.utils';
+import {Select} from '../../select/select';
+import {InputLabel} from '../../input/input-label';
+import {InputCheckboxLabel} from '../../input/input-checkbox-label';
 
 export interface DimensionTypeFormProps {
   dimensionType: DimensionType;

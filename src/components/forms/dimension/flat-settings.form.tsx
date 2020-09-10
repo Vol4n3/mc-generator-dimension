@@ -1,4 +1,4 @@
-import {FlatSettings} from '../../interface/dimension';
+import {FlatSettings} from '../../../interface/dimension';
 import {FC} from 'react';
 
 interface FlatSettingsFormProps {

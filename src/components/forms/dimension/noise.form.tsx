@@ -1,8 +1,8 @@
 import {FC} from 'react';
-import {DimensionGenerator} from '../../interface/dimension';
-import {LabelWrapper} from '../label-wrapper';
-import {Input} from '../input';
-import {parseSeed} from '../../utils/math.utils';
+import {DimensionGenerator} from '../../../interface/dimension';
+import {LabelWrapper} from '../../label-wrapper';
+import {Input} from '../../input';
+import {parseSeed} from '../../../utils/math.utils';
 import {BiomeSourceForm} from './biome-source.form';
 
 interface NoiseFormProps {
@@ -12,7 +12,7 @@ interface NoiseFormProps {
 }
 
 export const NoiseForm: FC<NoiseFormProps> = props => {
-  const {generator, onChange,customBiomes} = props;
+  const {generator, onChange, customBiomes} = props;
   return <>
     <LabelWrapper label={'Generator seed'}>
       <Input

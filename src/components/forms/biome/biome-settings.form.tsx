@@ -1,8 +1,8 @@
 import {FC} from 'react';
-import {BiomeWithParams} from '../../interface/dimension';
-import {parseInput} from '../../utils/math.utils';
-import {Card} from '../card/card';
-import {InputLabel} from '../input/input-label';
+import {BiomeWithParams} from '../../../interface/dimension';
+import {parseInput} from '../../../utils/math.utils';
+import {Card} from '../../card/card';
+import {InputLabel} from '../../input/input-label';
 
 interface BiomeSettingsFormProps {
   onChange: (e: BiomeWithParams) => void;

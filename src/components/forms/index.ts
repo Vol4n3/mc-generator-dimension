@@ -1,1 +1,1 @@
-export * from './dimension.form';
+export * from './dimension/dimension.form';

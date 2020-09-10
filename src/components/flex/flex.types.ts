@@ -1,3 +1,5 @@
+import {HTMLAttributes} from 'react';
+
 export const FlexDevices = ['xs', 'small', 'tablet', 'desktop'] as const;
 export const FlexAlignItems = ['center', 'baseline', 'top', 'flex-end', 'flex-start'] as const;
 export const FlexJustifyContents = [
@@ -11,7 +13,7 @@ export type FlexDevice = typeof FlexDevices[number];
 export type FlexAlignItem = typeof FlexAlignItems[number];
 export type FlexJustifyContent = typeof FlexJustifyContents[number];
 
-export interface FlexProps {
+export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   alignItems?: FlexAlignItem[];
   justifyContent?: FlexJustifyContent[];
   noWrap?: boolean;

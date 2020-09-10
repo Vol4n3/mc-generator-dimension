@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {BiomeCarvers} from '../../interface/biome';
+import {BiomeCarvers} from '../../../interface/biome';
 
 interface BiomeCarversFormProps {
   carvers: BiomeCarvers;

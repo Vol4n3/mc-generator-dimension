@@ -1,12 +1,12 @@
-import {Dimension, DimensionGenerator, DimensionGeneratorType, FlatSettings} from '../../interface/dimension';
+import {Dimension, DimensionGenerator, DimensionGeneratorType, FlatSettings} from '../../../interface/dimension';
 import {FC, useState} from 'react';
-import {LabelWrapper} from '../label-wrapper';
-import {RadioGroup} from '../radio-group';
+import {LabelWrapper} from '../../label-wrapper';
+import {RadioGroup} from '../../radio-group';
 import {NoiseForm} from './noise.form';
-import {generateSeed} from '../../utils/math.utils';
-import {Card} from '../card/card';
+import {generateSeed} from '../../../utils/math.utils';
+import {Card} from '../../card/card';
 import {FlatSettingsForm} from './flat-settings.form';
-import {InputLabel} from '../input/input-label';
+import {InputLabel} from '../../input/input-label';
 
 export interface DimensionFormProps {
   dimension: Dimension;

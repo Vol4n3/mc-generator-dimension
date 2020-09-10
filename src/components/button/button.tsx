@@ -9,12 +9,13 @@ const StyledButton = styled.button<ButtonProps>`
 font-size: 1rem;
 padding: 3px 10px;
 border: none;
+margin: 5px;
 cursor: ${({active}) => active ? 'initial' : 'pointer'};
-background-color: ${({active}) => active ? '#858585' : '#ff9447'};
+background-color: ${({active}) => active ? '#e04d15' : '#ff9447'};
 color: white;
 transition: all ease-in-out 200ms;
 &:hover{
-background-color: ${({active}) => active ? '#858585' : '#fda060'};
+background-color: ${({active}) => active ? '#e04d15' : '#e04d15'};
 box-shadow: ${({active}) => active ? 'none' : '0 0 3px 3px rgba(0,0,0,0.1)'};
 }
 `;
@@ -23,4 +24,4 @@ export const Button: FC<ButtonProps> = props => {
   return <StyledButton type={'button'} {...rest}>
     {children}
   </StyledButton>
-}
+};

@@ -7,17 +7,17 @@ import {
   BiomeSourceTheEnd,
   BiomeSourceType,
   BiomeSourceVanillaLayered
-} from '../../interface/dimension';
-import {LabelWrapper} from '../label-wrapper';
-import {Select} from '../select/select';
-import {generateRandFloat, parseInput} from '../../utils/math.utils';
-import {Button} from '../button';
+} from '../../../interface/dimension';
+import {LabelWrapper} from '../../label-wrapper';
+import {Select} from '../../select/select';
+import {generateRandFloat, parseInput, parseSeed} from '../../../utils/math.utils';
+import {Button} from '../../button';
 import {MultiNoiseParamsForm} from './multi-noise-params.form';
-import {BiomeSettingsForm} from './biome-settings.form';
-import {InputLabel} from '../input/input-label';
-import {InputCheckboxLabel} from '../input/input-checkbox-label';
-import {MultiSelect} from '../multi-select/multi-select';
-import {biomes} from '../../interface/biome';
+import {BiomeSettingsForm} from '../biome/biome-settings.form';
+import {InputLabel} from '../../input/input-label';
+import {InputCheckboxLabel} from '../../input/input-checkbox-label';
+import {MultiSelect} from '../../multi-select/multi-select';
+import {biomes} from '../../../interface/biome';
 
 type BiomeSourcePossible =
   BiomeSourceTheEnd
@@ -89,7 +89,7 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
       type={'number'}
       value={biomeSource.seed}
       required
-      onChange={e => onChange({...biomeSource, seed: parseInt(e.target.value)})}/>
+      onChange={e => onChange({...biomeSource, seed: parseSeed(e.target.value)})}/>
     <LabelWrapper label={'Biome source type'} caption={"The type of biome generation"}>
       <Select
         onSelected={emitChangeBST}

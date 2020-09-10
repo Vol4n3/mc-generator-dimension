@@ -45,7 +45,8 @@ export type BiomeEffects = {
   }
 }
 export type SpawnerConfig = {
-  type: MobsType,
+  type?: MobsType,
+  id: number;
   weight: number,
   minCount: number,
   maxCount: number

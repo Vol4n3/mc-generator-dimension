@@ -1,9 +1,9 @@
 import {FC} from 'react';
-import {Noise} from '../../interface/dimension';
-import {LabelWrapper} from '../label-wrapper';
-import {Input} from '../input';
-import {parseInput} from '../../utils/math.utils';
-import {Flex} from '../flex';
+import {Noise} from '../../../interface/dimension';
+import {LabelWrapper} from '../../label-wrapper';
+import {Input} from '../../input';
+import {parseInput} from '../../../utils/math.utils';
+import {Flex} from '../../flex';
 import styled from 'styled-components';
 
 interface MultiNoiseParamsFormParams {
@@ -11,7 +11,8 @@ interface MultiNoiseParamsFormParams {
   onChange: (noise: Noise) => void;
   label: string;
 }
-const Wrapper= styled.div`
+
+const Wrapper = styled.div`
 border: 1px solid #ccc;
 `;
 export const MultiNoiseParamsForm: FC<MultiNoiseParamsFormParams> = props => {

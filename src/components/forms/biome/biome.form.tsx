@@ -10,17 +10,18 @@ import {
   SurfaceBuilders,
   TempModifier,
   TempModifiers
-} from '../../interface/biome';
-import {Card} from '../card/card';
-import {LabelWrapper} from '../label-wrapper';
-import {Select} from '../select/select';
-import {InputLabel} from '../input/input-label';
-import {parseInput} from '../../utils/math.utils';
+} from '../../../interface/biome';
+import {Card} from '../../card/card';
+import {LabelWrapper} from '../../label-wrapper';
+import {Select} from '../../select/select';
+import {InputLabel} from '../../input/input-label';
+import {parseInput} from '../../../utils/math.utils';
 import {BiomeEffectForm} from './biome-effect.form';
 import {BiomeCarversForm} from './biome-carvers.form';
 import {BiomeFeaturesForm} from './biome-features.form';
-import {MultiSelect} from '../multi-select/multi-select';
-import {InputCheckboxLabel} from '../input/input-checkbox-label';
+import {MultiSelect} from '../../multi-select/multi-select';
+import {InputCheckboxLabel} from '../../input/input-checkbox-label';
+import {BiomeSpawnerForm} from './biome-spawner.form';
 
 interface BiomeFormsProps {
   biome: Biome;
@@ -113,7 +114,7 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
     <MultiSelect label={'starts'} caption={'The structures to generate in this biome.'} values={biome.starts}
                  options={StructureFeatures.map(item => ({value: item, label: item}))}
                  onChange={values => onChange({...biome, starts: values as StructureFeature[]})}/>
-    {/* todo: spawner here*/}
+    <BiomeSpawnerForm onChange={bs => onChange({...biome, spawners: bs})} spawners={biome.spawners}/>
     <InputCheckboxLabel
       label={'player_spawn_friendly'} onChange={e => onChange({...biome, player_spawn_friendly: e})}
       value={biome.player_spawn_friendly}/>
@@ -124,6 +125,6 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
       onChange={event => onChange({...biome, creature_spawn_probability: parseInput(event.target.value, 0, 1)})}
       type={'number'}/>
     {/* todo: Optional parent*/}
-    {/*Spawn cost*/}
+    {/* todo:  Spawn cost */}
   </Card>
-}
+};

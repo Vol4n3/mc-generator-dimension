@@ -1,15 +1,16 @@
-import {FC, useMemo} from 'react';
-import {MultiSelect} from '../multi-select/multi-select';
-import {BiomeFeaturesLevel} from '../../interface/biome';
-import {BiomeFeatures} from '../../interface/biome-features';
-import {Option} from '../../interface/ui';
-import {updateItemInArray} from '../../utils/object.manipulation';
-import {Flex} from '../flex';
+import {FC} from 'react';
+import {MultiSelect} from '../../multi-select/multi-select';
+import {BiomeFeaturesLevel} from '../../../interface/biome';
+import {BiomeFeatures} from '../../../interface/biome-features';
+import {Option} from '../../../interface/ui';
+import {updateItemInArray} from '../../../utils/object.manipulation';
+import {Flex} from '../../flex';
 
 interface BiomeFeaturesFormProps {
   biomeFeatures: BiomeFeaturesLevel;
   onChange: (bf: BiomeFeaturesLevel) => void
 }
+
 const featuresPossibleLevel: { label: string, caption: string }[] = [
   {label: 'RAW_GENERATION', caption: 'Used by miniature end island features by default.'},
   {label: 'LAKES', caption: 'Used by water and lava lakes by default'},
@@ -30,24 +31,23 @@ const featuresPossibleLevel: { label: string, caption: string }[] = [
     caption: 'Used for trees, bamboo, cacti, kelp, and other ground and ocean vegetation, as well as lava and water springs by default.'
   },
   {label: 'TOP_LAYER_MODIFICATION', caption: 'Used for surface freezing by default.'},
-]
+];
 const featuresOption: Option<string>[] = BiomeFeatures.map(item => ({label: item, value: item}));
 export const BiomeFeaturesForm: FC<BiomeFeaturesFormProps> = props => {
   const {biomeFeatures, onChange} = props;
-  return useMemo(()=><>
+  return <>
     <h4>Features</h4>
     <Flex>
       {featuresPossibleLevel.map((level, index) =>
-        <Flex key={level.label} col={[12,3]}>
-        <MultiSelect
-          label={level.label}
-          caption={level.caption}
-          values={biomeFeatures[index]}
-          options={featuresOption}
-          onChange={values => onChange(updateItemInArray(biomeFeatures, index, values) as BiomeFeaturesLevel)}/>
+        <Flex key={level.label} col={[12, 6, 4, 3]}>
+          <MultiSelect
+            label={level.label}
+            caption={level.caption}
+            values={biomeFeatures[index]}
+            options={featuresOption}
+            onChange={values => onChange(updateItemInArray(biomeFeatures, index, values) as BiomeFeaturesLevel)}/>
         </Flex>
       )}
     </Flex>
-  </>,[biomeFeatures]);
-
-}
+  </>;
+};

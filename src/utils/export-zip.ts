@@ -7,20 +7,18 @@ export const exportFiles = (data: Data) => {
   zip.file('pack.mcmeta', JSON.stringify({
     "pack": {
       "pack_format": 6,
-      "description": "Dimensions generator by Vol4n3 on https://tools.volcraft.fr"
+      "description": "Dimensions generator by Vol4n3 https://tools.volcraft.fr"
     }
   }, null, 2))
   const dataFolder = zip.folder('data');
-  const rootMinecraftFolder = dataFolder?.folder('minecraft');
-  const dimensionFolder = rootMinecraftFolder?.folder('dimension');
-  const mcNsDimFolder = dimensionFolder?.folder(data.namespace)
+  const rootNamespaceFolder = dataFolder?.folder(data.namespace);
+  const dimensionFolder = rootNamespaceFolder?.folder('dimension');
   data.dimensions.forEach((dim) => {
-    mcNsDimFolder?.file(dim.name + '.json', JSON.stringify({
+    dimensionFolder?.file(dim.name + '.json', JSON.stringify({
       type: dim.type,
       generator: dim.generator
     }, null, 2))
   });
-  const rootNamespaceFolder = dataFolder?.folder(data.namespace);
   const dimensionType = rootNamespaceFolder?.folder('dimension_type');
   data.dimensionType.forEach((dim) => {
     dimensionType?.file(dim.name + '.json', JSON.stringify(dim, null, 2))
@@ -29,9 +27,9 @@ export const exportFiles = (data: Data) => {
   const biomeFolder = worldgenFolder?.folder('biome');
   data.biomes.forEach((biome) => {
     biomeFolder?.file(biome.name + '.json', JSON.stringify(biome, null, 2))
-  })
+  });
   zip.generateAsync({type: "blob"})
     .then(function (content) {
       saveAs(content, "generator_dimension.zip");
     });
-}
+};
