@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, FormEvent, useState} from 'react';
 import {Flex} from '../../flex';
 import {Button} from '../../button';
 import {DimensionForm} from './dimension.form';
@@ -8,16 +8,16 @@ import {removeItemInArray, updateItemInArray} from '../../../utils/object.manipu
 
 interface DimensionPanelsProps {
   dimensions: Dimension[];
-  onChange: (dims: Dimension[]) => void;
+  onSubmit: (dims: Dimension[]) => void;
   customBiomes: string[];
 }
 
 export const DimensionPanels: FC<DimensionPanelsProps> = props => {
-  const {onChange, dimensions, customBiomes} = props;
-  const [getId, setId] = useState<number>(1);
-
+  const {onSubmit, customBiomes, dimensions} = props;
+  const [getId, setId] = useState<number>(dimensions[0] ? dimensions[0].id + 1 : 1);
+  const [getDimensions, setDimensions] = useState<Dimension[]>(dimensions);
   const createDimension = () => {
-    onChange([
+    setDimensions([
       {
         id: getId,
         name: 'dimension' + getId,
@@ -27,22 +27,26 @@ export const DimensionPanels: FC<DimensionPanelsProps> = props => {
           settings: ''
         }
       },
-      ...dimensions
+      ...getDimensions
     ]);
     setId(getId + 1);
   };
-  return <>
+
+  const emitSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit(getDimensions);
+  }
+  return <form onSubmit={emitSubmit}>
     <Flex justifyContent={['center']}>
-      <Button style={{marginTop: '10px'}} onClick={() => createDimension()}>+ Add dimension +</Button>
+      <Button onClick={createDimension}>add new dimension</Button>
+      <Button type={'submit'} disabled={!getDimensions.length}>Save</Button>
     </Flex>
-    {dimensions.map((dim, index) => {
-      return <DimensionForm
-        onRemove={() => onChange(removeItemInArray(dimensions, index))}
-        key={dim.id}
-        dimension={dim}
-        customBiomes={customBiomes}
-        onChange={value => onChange(updateItemInArray(dimensions, index, value))}
-      />
-    })}
-  </>
+    {getDimensions.map((dim, index) => <DimensionForm
+      key={dim.id}
+      dimension={dim}
+      onRemove={() => setDimensions(removeItemInArray(getDimensions, index))}
+      customBiomes={customBiomes}
+      onChange={d => setDimensions(updateItemInArray(getDimensions, index, d))}
+    />)}
+  </form>
 };

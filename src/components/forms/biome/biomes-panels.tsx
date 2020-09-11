@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, FormEvent, useState} from 'react';
 import {Biome} from '../../../interface/biome';
 import {Flex} from '../../flex';
 import {Button} from '../../button';
@@ -7,14 +7,15 @@ import {removeItemInArray, updateItemInArray} from '../../../utils/object.manipu
 
 interface BiomesPanelsProps {
   biomes: Biome[];
-  onChange: (b: Biome[]) => void;
+  onSubmit: (b: Biome[]) => void;
 }
 
 export const BiomesPanels: FC<BiomesPanelsProps> = props => {
-  const {biomes, onChange} = props;
-  const [getId, setId] = useState<number>(1);
+  const {biomes, onSubmit} = props;
+  const [getId, setId] = useState<number>(biomes[0] ? biomes[0].id + 1 : 1);
+  const [getBiomes, setBiomes] = useState<Biome[]>(biomes);
   const createBiome = () => {
-    onChange([
+    setBiomes([
       {
         id: getId,
         name: 'biome' + getId,
@@ -52,18 +53,23 @@ export const BiomesPanels: FC<BiomesPanelsProps> = props => {
           water_creature: []
         }
       }
-      , ...biomes
+      , ...getBiomes
     ]);
     setId(getId + 1);
   };
-  return <>
+  const emitSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit(getBiomes);
+  }
+  return <form onSubmit={emitSubmit}>
     <Flex justifyContent={['center']}>
-      <Button style={{marginTop: '10px'}} onClick={createBiome}>+ Add biome +</Button>
+      <Button onClick={createBiome}>Add new biome </Button>
+      <Button type={'submit'} disabled={!getBiomes.length}>Save biomes</Button>
     </Flex>
-    {biomes.map((biome, index) => <BiomeForm
+    {getBiomes.map((biome, index) => <BiomeForm
       key={biome.id}
       biome={biome}
-      onClose={() => onChange(removeItemInArray(biomes, index))}
-      onChange={(value) => onChange(updateItemInArray(biomes, index, value))}/>)}
-  </>
+      onClose={() => setBiomes(removeItemInArray(getBiomes, index))}
+      onChange={(value) => setBiomes(updateItemInArray(getBiomes, index, value))}/>)}
+  </form>
 };

@@ -66,7 +66,7 @@ export const DimensionForm: FC<DimensionFormProps> = props => {
         required/>
     <LabelWrapper label={'Type de générateur'}>
       <RadioGroup<DimensionGeneratorType>
-        name={'generator'}
+        name={dimension.name}
         options={[
           {value: 'minecraft:noise', label: 'Noise Dimension'},
           {value: 'minecraft:flat', label: 'Flat Dimension'}

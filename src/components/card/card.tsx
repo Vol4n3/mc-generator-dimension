@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {Animation, Keyframes} from '../animation';
+import {Phase, KeyframesConfig} from '../phase';
 import styled from 'styled-components';
 import {Flex} from '../flex';
 import {Button} from '../button';
@@ -26,14 +26,14 @@ export const Card: FC<CardProps> = props => {
       onClose()
     }, 300)
   }
-  return <Animation
-    show={getShow} onStarting enter={{keyframes: Keyframes.slideInFromLeft}}
-    exit={{keyframes: Keyframes.fadeOut}}><Wrapper bgColor={bgColor}>
-    <Flex justifyContent={['flex-end']}>
+  return <Phase
+    show={getShow} onStarting enter={{keyframes: KeyframesConfig.slideInFromLeft}}
+    exit={{keyframes: KeyframesConfig.fadeOut}}><Wrapper bgColor={bgColor}>
+    {onClose && <Flex justifyContent={['flex-end']}>
       <Button onClick={emitClose} style={{position: 'absolute'}}>X</Button>
-    </Flex>
+    </Flex>}
     {
       children
     }</Wrapper>
-  </Animation>
+  </Phase>
 }

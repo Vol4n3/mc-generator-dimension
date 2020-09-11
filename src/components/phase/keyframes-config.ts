@@ -10,7 +10,7 @@ export type KeyframesName =
   | 'slideOutToTop'
   | 'slideOutToBottom'
   | 'growInToRight';
-export const Keyframes: { [key in KeyframesName]: Keyframe[] } = {
+export const KeyframesConfig: { [key in KeyframesName]: Keyframe[] } = {
   fadeIn: [{ opacity: 0 }, { opacity: 1 }],
   fadeOut: [{ opacity: 1 }, { opacity: 0 }],
   slideInFromRight: [

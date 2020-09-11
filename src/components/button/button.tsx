@@ -14,9 +14,13 @@ cursor: ${({active}) => active ? 'initial' : 'pointer'};
 background-color: ${({active}) => active ? '#e04d15' : '#ff9447'};
 color: white;
 transition: all ease-in-out 200ms;
-&:hover{
+&:not(:disabled):hover{
 background-color: ${({active}) => active ? '#e04d15' : '#e04d15'};
 box-shadow: ${({active}) => active ? 'none' : '0 0 3px 3px rgba(0,0,0,0.1)'};
+}
+&:disabled{
+  background-color: #ccc;
+  cursor: initial;
 }
 `;
 export const Button: FC<ButtonProps> = props => {

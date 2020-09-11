@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import styled from 'styled-components';
 import {Button} from '../button';
-import {Animation, Keyframes} from '../animation';
+import {Phase, KeyframesConfig} from '../phase';
 import {Flex} from '../flex';
 
 interface TagProps {
@@ -26,8 +26,8 @@ export const Tag: FC<TagProps> = props => {
       onClose();
     }, 300)
   }
-  return <Animation show={getShow} onStarting enter={{keyframes: Keyframes.fadeIn}}
-                    exit={{keyframes: Keyframes.fadeOut}}>
+  return <Phase show={getShow} onStarting enter={{keyframes: KeyframesConfig.fadeIn}}
+                exit={{keyframes: KeyframesConfig.fadeOut}}>
     <Wrapper title={label}>
         <Flex alignItems={['center']} noWrap>
           <span>{label}</span>
@@ -36,6 +36,6 @@ export const Tag: FC<TagProps> = props => {
           </div>
         </Flex>
     </Wrapper>
-  </Animation>
+  </Phase>
 
 }

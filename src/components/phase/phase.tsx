@@ -32,7 +32,7 @@ export interface AnimationProps {
 }
 type stateType = 'before' | 'start' | 'showed' | 'end' | 'hide';
 
-export const Animation: React.FC<AnimationProps> = props => {
+export const Phase: React.FC<AnimationProps> = props => {
   const { children, show, enter, exit, beforeStyle, onStarting } = props;
   const refContainer = React.useRef<HTMLDivElement>();
   const [getState, setState] = React.useState<stateType>(

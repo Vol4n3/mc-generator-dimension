@@ -1,4 +1,4 @@
-import {FormEvent, useMemo, useState} from 'react';
+import {useState} from 'react';
 import {Button} from '../../../components/button';
 import {DimensionType, MinecraftDimensionTypes} from '../../../interface/dimension-type';
 import {exportFiles} from '../../../utils/export-zip';
@@ -8,11 +8,13 @@ import {Biome, biomes, SurfaceBuilders} from '../../../interface/biome';
 import {NoiseSettings, noiseSettingsDefault} from '../../../interface/noise-settings';
 import {InputLabel} from '../../../components/input/input-label';
 import {NavTabBar} from '../../../components/tab/nav-tab-bar';
-import {Flex} from '../../../components/flex';
 import {DimensionPanels} from '../../../components/forms/dimension/dimension-panels';
 import {Dimension} from '../../../interface/dimension';
 import {BiomesPanels} from '../../../components/forms/biome/biomes-panels';
 import {DimensionTypePanels} from '../../../components/forms/dimension-type/dimension-type-panels';
+import {KeyframesConfig, Phase} from '../../../components/phase';
+import {TagCloud} from '../../../components/tag-cloud';
+import {LabelWrapper} from '../../../components/label-wrapper';
 
 const FixedBottomLeft = styled.div`
   position: fixed;
@@ -20,20 +22,10 @@ const FixedBottomLeft = styled.div`
   left: 20px;
 `;
 
-const FixedTopRight = styled.div`
-  position: fixed;
-  top: 10px;
-  right: 20px;
-`;
-const HorizontalScroll = styled.div`
-  overflow-x: auto;
-  display:flex;
-`;
 const ExtendedDiv = styled.div`
-width: 100vw;
+width: 100%;
 padding:25px;
 position: relative;
-flex:none;
 `;
 const DimensionsPage = () => {
   const [getDimensions, setDimensions] = useState<Dimension[]>([]);
@@ -42,8 +34,11 @@ const DimensionsPage = () => {
   const [getBiomes, setBiomes] = useState<Biome[]>([]);
   const [getNamespace, setNamespace] = useState<string>('generator');
   const [getSelectedTab, setSelectedTab] = useState<number>(0);
-  const submitData = (event: FormEvent) => {
-    event.preventDefault();
+  const isFill: boolean = !!(getDimensions.length || getBiomes.length || getDimensionType.length);
+  const exportData = () => {
+    if (!isFill) {
+      return;
+    }
     exportFiles({
       dimensions: getDimensions,
       dimensionType: getDimensionType,
@@ -52,56 +47,105 @@ const DimensionsPage = () => {
       namespace: getNamespace
     });
   };
-  const scrollTab = (value: number) => {
-    setSelectedTab(value);
-    document.getElementById('scroll' + value)?.scrollIntoView({behavior: "smooth"});
-  };
   const scrollTop = () => {
     document.getElementById('scroll_top')?.scrollIntoView({behavior: "smooth"});
   };
+  const confirmBeforeChange = (selected: number) => {
+    if (getSelectedTab > 0) {
+      const canChange = confirm('switch tab will not save changes');
+      if (!canChange) {
+        return
+      }
+    }
+    setSelectedTab(selected);
+  }
   return <MainTemplate title={'Minecraft Generator dimension 1.16.2'}>
-    <form onSubmit={submitData}>
-      <div id={'scroll_top'}>
-        <NavTabBar
-          tabs={['Dimension', 'Dimension Type', 'Noise settings', 'Biome']}
-          selectedTabs={getSelectedTab}
-          onChange={(value) => {
-            scrollTab(value)
-          }}/>
-      </div>
+    <div id={'scroll_top'}>
+      <NavTabBar
+        tabs={['home', 'Dimension', 'Dimension Type', 'Noise settings', 'Biome']}
+        selectedTabs={getSelectedTab}
+        onChange={confirmBeforeChange}/>
+    </div>
+    <Phase show={getSelectedTab === 0}
+           onStarting
+           enter={{keyframes: KeyframesConfig.fadeIn, delay: 250}}
+           exit={{keyframes: KeyframesConfig.fadeOut}}>
       <InputLabel
         label={'Namespace'}
         caption={'Namespace is used to found custom dimension , dimension_type , noise_settings or biomes'}
         required
+        readOnly={isFill ? true : undefined}
         value={getNamespace}
         onChange={(ev) => setNamespace(ev.target.value)}/>
-      <HorizontalScroll>
-        <ExtendedDiv id={'scroll0'}>
-          {useMemo(() => <DimensionPanels
-            dimensions={getDimensions}
-            onChange={dims => setDimensions(dims)}
-            customBiomes={getBiomes.map(b => `${getNamespace}:${b.name}`)}/>, [getDimensions, getBiomes])}
-        </ExtendedDiv>
-        <ExtendedDiv id={'scroll1'}>
-          {useMemo(() => <DimensionTypePanels onChange={dts => setDimensionType(dts)}
-                                              dimensionTypes={getDimensionType}/>, [getDimensionType])}
-        </ExtendedDiv>
-        <ExtendedDiv id={'scroll2'}>
-          <Flex justifyContent={['center']}>
-            <Button style={{marginTop: '10px'}}>+ Add noise settings +</Button>
-          </Flex>
-        </ExtendedDiv>
-        <ExtendedDiv id={'scroll3'}>
-          {useMemo(() => <BiomesPanels biomes={getBiomes} onChange={b => setBiomes(b)}/>, [getBiomes])}
-        </ExtendedDiv>
-      </HorizontalScroll>
-      <FixedBottomLeft>
-        <Button onClick={scrollTop}>▲</Button>
-      </FixedBottomLeft>
-      <FixedTopRight>
-        <Button type={'submit'}>Export</Button>
-      </FixedTopRight>
-    </form>
+      <div>
+        <LabelWrapper label={"created dimensions"}>
+          <TagCloud value={getDimensions.map(d => d.name)}
+                    onChange={val => setDimensions(getDimensions.filter(item => val.indexOf(item.name) !== -1))}/>
+        </LabelWrapper>
+        <LabelWrapper label={"created dimensions types"}>
+          <TagCloud value={getDimensionType.map(d => d.name)}
+                    onChange={val => setDimensionType(getDimensionType.filter(item => val.indexOf(item.name) !== -1))}/>
+        </LabelWrapper>
+        <LabelWrapper label={"created biomes"}>
+          <TagCloud value={getBiomes.map(d => d.name)}
+                    onChange={val => setBiomes(getBiomes.filter(item => val.indexOf(item.name) !== -1))}/>
+        </LabelWrapper>
+        <Button onClick={exportData} disabled={!isFill}>Export all</Button>
+      </div>
+    </Phase>
+    <Phase
+      show={getSelectedTab === 1}
+      onStarting
+      enter={{keyframes: KeyframesConfig.fadeIn, delay: 250}}
+      exit={{keyframes: KeyframesConfig.fadeOut}}>
+      <ExtendedDiv>
+        <DimensionPanels
+          dimensions={getDimensions}
+          onSubmit={dims => {
+            setDimensions(dims);
+            setSelectedTab(0);
+          }}
+          customBiomes={getBiomes.map(b => `${getNamespace}:${b.name}`)}/>
+      </ExtendedDiv>
+    </Phase>
+    <Phase
+      show={getSelectedTab === 2}
+      onStarting
+      enter={{keyframes: KeyframesConfig.fadeIn, delay: 250}}
+      exit={{keyframes: KeyframesConfig.fadeOut}}>
+      <ExtendedDiv>
+        <DimensionTypePanels
+          onSubmit={dts => {
+            setDimensionType(dts);
+            setSelectedTab(0);
+          }}
+          dimensionTypes={getDimensionType}/>
+      </ExtendedDiv>
+    </Phase>
+    <Phase
+      show={getSelectedTab === 3}
+      onStarting
+      enter={{keyframes: KeyframesConfig.fadeIn, delay: 250}}
+      exit={{keyframes: KeyframesConfig.fadeOut}}>
+      <ExtendedDiv>
+      </ExtendedDiv>
+    </Phase>
+    <Phase
+      show={getSelectedTab === 4}
+      onStarting
+      enter={{keyframes: KeyframesConfig.fadeIn, delay: 250}}
+      exit={{keyframes: KeyframesConfig.fadeOut}}>
+      <ExtendedDiv>
+        <BiomesPanels biomes={getBiomes} onSubmit={b => {
+          setBiomes(b);
+          setSelectedTab(0);
+        }}/>
+      </ExtendedDiv>
+    </Phase>
+    <FixedBottomLeft>
+      <Button onClick={scrollTop}>▲</Button>
+    </FixedBottomLeft>
+
     <datalist id={'biomes'}>
       {[...biomes, ...getBiomes.map(b => `${getNamespace}:${b.name}`)].map((b, i) => <option key={b + i}
                                                                                              value={b}/>)}

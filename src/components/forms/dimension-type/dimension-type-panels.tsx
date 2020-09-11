@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, FormEvent, useState} from 'react';
 import {Flex} from '../../flex';
 import {Button} from '../../button';
 import {DimensionTypeForm} from './dimension-type.form';
@@ -7,14 +7,15 @@ import {removeItemInArray, updateItemInArray} from '../../../utils/object.manipu
 
 interface DimensionTypePanelProps {
   dimensionTypes: DimensionType[];
-  onChange: (dts: DimensionType[]) => void;
+  onSubmit: (dts: DimensionType[]) => void;
 }
 
 export const DimensionTypePanels: FC<DimensionTypePanelProps> = props => {
-  const {onChange, dimensionTypes} = props;
-  const [getId, setId] = useState<number>(1);
+  const {onSubmit, dimensionTypes} = props;
+  const [getId, setId] = useState<number>(dimensionTypes[0] ? dimensionTypes[0].id + 1 : 1);
+  const [getDimensionTypes, setDimensionTypes] = useState<DimensionType[]>(dimensionTypes);
   const createDimensionType = () => {
-    onChange([
+    setDimensionTypes([
       {
         id: getId,
         name: 'dimension_type' + getId,
@@ -31,20 +32,25 @@ export const DimensionTypePanels: FC<DimensionTypePanelProps> = props => {
         ultrawarm: false,
         respawn_anchor_works: true
       },
-      ...dimensionTypes
+      ...getDimensionTypes
     ]);
     setId(getId + 1);
   };
-  return <>
+  const emitSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit(getDimensionTypes);
+  }
+  return <form onSubmit={emitSubmit}>
     <Flex justifyContent={['center']}>
-      <Button onClick={() => createDimensionType()} style={{marginTop: '10px'}}>+ Add dimension type +</Button>
+      <Button onClick={() => createDimensionType()}>Add new dimension type </Button>
+      <Button type={'submit'} disabled={!dimensionTypes.length}>Save</Button>
     </Flex>
-    {dimensionTypes.map((dim, index) =>
+    {getDimensionTypes.map((dim, index) =>
       <DimensionTypeForm
-        onRemove={() => onChange(removeItemInArray(dimensionTypes, index))}
+        onRemove={() => setDimensionTypes(removeItemInArray(getDimensionTypes, index))}
         key={dim.id}
         dimensionType={dim}
-        onChange={value => onChange(updateItemInArray(dimensionTypes, index, value))}
+        onChange={value => setDimensionTypes(updateItemInArray(getDimensionTypes, index, value))}
       />)}
-  </>
+  </form>
 };
