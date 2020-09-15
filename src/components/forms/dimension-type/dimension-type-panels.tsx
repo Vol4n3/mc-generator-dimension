@@ -43,7 +43,7 @@ export const DimensionTypePanels: FC<DimensionTypePanelProps> = props => {
   return <form onSubmit={emitSubmit}>
     <Flex justifyContent={['center']}>
       <Button onClick={() => createDimensionType()}>Add new dimension type </Button>
-      <Button type={'submit'} disabled={!dimensionTypes.length}>Save</Button>
+      <Button type={'submit'} disabled={!getDimensionTypes.length}>Save</Button>
     </Flex>
     {getDimensionTypes.map((dim, index) =>
       <DimensionTypeForm

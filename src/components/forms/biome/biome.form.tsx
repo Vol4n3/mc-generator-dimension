@@ -5,14 +5,13 @@ import {
   BiomeCategory,
   Precipitation,
   Precipitations,
-  StructureFeature,
   StructureFeatures,
   SurfaceBuilders,
   TempModifier,
   TempModifiers
 } from '../../../interface/biome';
 import {Card} from '../../card/card';
-import {LabelWrapper} from '../../label-wrapper';
+import {LabelWrapper, LabelWrapperCaption} from '../../label-wrapper';
 import {Select} from '../../select/select';
 import {InputLabel} from '../../input/input-label';
 import {parseInput} from '../../../utils/math.utils';
@@ -22,6 +21,7 @@ import {BiomeFeaturesForm} from './biome-features.form';
 import {MultiSelect} from '../../multi-select/multi-select';
 import {InputCheckboxLabel} from '../../input/input-checkbox-label';
 import {BiomeSpawnerForm} from './biome-spawner.form';
+import {InputSelect} from '../../select/input-select';
 
 interface BiomeFormsProps {
   biome: Biome;
@@ -57,11 +57,30 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
         }))}
         onSelected={value => onChange({...biome, category: (value ? value : 'none') as BiomeCategory})
         }/>
+      <LabelWrapperCaption>
+        Any biomes in the category
+        <ul>
+          <li>ocean will be considered part of the ocean temperature category; other temperature categories are
+            controlled by the biome's temperature value. This means that biomes in the ocean category should typically
+            be placed near each other.
+          </li>
+          <li>Biomes in the categories ocean and river will play the underwater music instead of their normal music when
+            the player is underwater.
+          </li>
+          <li>Zombie sieges and patrols will not spawn in biomes in the category mushroom.</li>
+          <li>Rabbits spawning in biomes in the category desert will always have the desert skin, unless they are in a
+            biome with precipitation set to snow.
+          </li>
+          <li>Mobs in the water_ambient category spawn much less often in biomes in the category river.</li>
+          <li>Ocean monuments will not spawn in any biome which isn't in the category ocean or river.</li>
+        </ul>
+      </LabelWrapperCaption>
     </LabelWrapper>
     <InputLabel
       label={'depth'}
       caption={'Used for terrain noise generation. Biomes with positive depth are considered land, biomes with negative depth are oceans.'}
       type={'number'}
+      step={0.1}
       value={biome.depth}
       required
       onChange={e => onChange({...biome, depth: parseInput(e.target.value)})}
@@ -101,19 +120,21 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
     <BiomeEffectForm biomeEffects={biome.effects} onChange={(biomeEffects) => {
       onChange({...biome, effects: biomeEffects})
     }}/>
-    <LabelWrapper
+    <InputSelect
       label={'surface_builder'}
-      caption={'The namespaced id of the configured surface builder to use.'}>
-      <Select
-        options={SurfaceBuilders.map(item => ({value: item, label: item}))}
-        onSelected={(v) => onChange({...biome, surface_builder: v})}
-        required/>
-    </LabelWrapper>
+      caption={'The namespaced id of the configured surface builder to use.'}
+      options={SurfaceBuilders}
+      uid={'surface_builder'}
+      value={biome.surface_builder}
+      onChange={(v) => onChange({...biome, surface_builder: v})}
+      required/>
     <BiomeCarversForm carvers={biome.carvers} onChange={bc => onChange({...biome, carvers: bc})}/>
     <BiomeFeaturesForm biomeFeatures={biome.features} onChange={bf => onChange({...biome, features: bf})}/>
-    <MultiSelect label={'starts'} caption={'The structures to generate in this biome.'} values={biome.starts}
-                 options={StructureFeatures.map(item => ({value: item, label: item}))}
-                 onChange={values => onChange({...biome, starts: values as StructureFeature[]})}/>
+    <MultiSelect label={'starts'} caption={'The structures to generate in this biome.'}
+                 values={biome.starts}
+                 uid={'starts'}
+                 options={StructureFeatures}
+                 onChange={values => onChange({...biome, starts: values})}/>
     <BiomeSpawnerForm onChange={bs => onChange({...biome, spawners: bs})} spawners={biome.spawners}/>
     <InputCheckboxLabel
       label={'player_spawn_friendly'} onChange={e => onChange({...biome, player_spawn_friendly: e})}

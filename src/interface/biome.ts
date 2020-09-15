@@ -1,4 +1,3 @@
-import {BiomeFeature} from './biome-features';
 import {MobsType} from './mobs';
 
 
@@ -80,8 +79,7 @@ export const SurfaceBuilders = [
   "minecraft:swamp",
   "minecraft:warped_forest",
   "minecraft:wooded_badlands",
-] as const;
-export type SurfaceBuilder = typeof SurfaceBuilders[number];
+];
 export const StructureFeatures = [
   "minecraft:bastion_remnant",
   "minecraft:buried_treasure",
@@ -114,18 +112,26 @@ export const StructureFeatures = [
   "minecraft:village_savanna",
   "minecraft:village_snowy",
   "minecraft:village_taiga",
-] as const;
-export type StructureFeature = typeof StructureFeatures[number]
+];
+export const CarversAir = [
+  "minecraft:cave",
+  "minecraft:canyon",
+  "minecraft:ocean_cave",
+  "minecraft:nether_cave"
+];
+export const CarversLiquid = [
+  "minecraft:underwater_canyon",
+  "minecraft:underwater_cave"
+];
 
 export interface BiomeCarvers {
   air: string[],
   liquid: string[]
 }
 
-export type BiomeFeaturesLevel = [BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[], BiomeFeature[]];
+export type BiomeFeaturesLevel = [string[], string[], string[], string[], string[], string[], string[], string[], string[], string[]];
 
-export interface BiomeSpawners
-{
+export interface BiomeSpawners {
   monster: SpawnerConfig[];
   creature: SpawnerConfig[];
   ambient: SpawnerConfig[];
@@ -148,10 +154,10 @@ export interface Biome {
   temperature_modifier: TempModifier | string;
   downfall: number;
   effects: BiomeEffects;
-  surface_builder: SurfaceBuilder | string;
+  starts: string[];
   carvers: BiomeCarvers;
   features: BiomeFeaturesLevel;
-  starts: StructureFeature[];
+  surface_builder: string;
   spawners: BiomeSpawners;
   player_spawn_friendly: boolean;
   creature_spawn_probability: number;

@@ -1,4 +1,4 @@
-import {FC, SelectHTMLAttributes,  useState} from 'react';
+import {FC, SelectHTMLAttributes, useState} from 'react';
 import {Option} from '../../interface/ui';
 import styled from 'styled-components';
 import {Flex} from '../flex';

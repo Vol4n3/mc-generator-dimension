@@ -1,10 +1,20 @@
 import {FC} from 'react';
 import {MultiSelect} from '../../multi-select/multi-select';
 import {BiomeFeaturesLevel} from '../../../interface/biome';
-import {BiomeFeatures} from '../../../interface/biome-features';
-import {Option} from '../../../interface/ui';
 import {updateItemInArray} from '../../../utils/object.manipulation';
 import {Flex} from '../../flex';
+import {
+  LAKES_FEATURES,
+  LOCAL_MODIFICATIONS_FEATURES,
+  RAW_GENERATION_FEATURES,
+  STRONGHOLDS_FEATURES,
+  SURFACE_STRUCTURES_FEATURES,
+  TOP_LAYER_FEATURES,
+  UNDERGROUND_DECORATION_FEATURES,
+  UNDERGROUND_ORES_FEATURES,
+  UNDERGROUND_STRUCTURES_FEATURES,
+  VEGETAL_DECORATION_FEATURES
+} from '../../../interface/biome-features';
 
 interface BiomeFeaturesFormProps {
   biomeFeatures: BiomeFeaturesLevel;
@@ -32,7 +42,19 @@ const featuresPossibleLevel: { label: string, caption: string }[] = [
   },
   {label: 'TOP_LAYER_MODIFICATION', caption: 'Used for surface freezing by default.'},
 ];
-const featuresOption: Option<string>[] = BiomeFeatures.map(item => ({label: item, value: item}));
+const featuresOptions: string[][] = [
+  RAW_GENERATION_FEATURES,
+  LAKES_FEATURES,
+  LOCAL_MODIFICATIONS_FEATURES,
+  UNDERGROUND_STRUCTURES_FEATURES,
+  SURFACE_STRUCTURES_FEATURES,
+  STRONGHOLDS_FEATURES,
+  UNDERGROUND_ORES_FEATURES,
+  UNDERGROUND_DECORATION_FEATURES,
+  VEGETAL_DECORATION_FEATURES,
+  TOP_LAYER_FEATURES
+];
+
 export const BiomeFeaturesForm: FC<BiomeFeaturesFormProps> = props => {
   const {biomeFeatures, onChange} = props;
   return <>
@@ -44,7 +66,8 @@ export const BiomeFeaturesForm: FC<BiomeFeaturesFormProps> = props => {
             label={level.label}
             caption={level.caption}
             values={biomeFeatures[index]}
-            options={featuresOption}
+            uid={level.label}
+            options={featuresOptions[index]}
             onChange={values => onChange(updateItemInArray(biomeFeatures, index, values) as BiomeFeaturesLevel)}/>
         </Flex>
       )}

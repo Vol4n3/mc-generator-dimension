@@ -211,7 +211,8 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
         <MultiSelect
           label={'ajouter un biome'}
           values={(biomeSource as BiomeSourceCheckerboard).biomes}
-          options={[...customBiomes,...biomes].map(item => ({value: item, label: item}))}
+          options={[...customBiomes, ...biomes]}
+          uid={'checkerboardBiomes'}
           onChange={value => onChange({...biomeSource, biomes: value})}/>
       </div>
     }

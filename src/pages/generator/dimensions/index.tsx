@@ -18,8 +18,8 @@ import {LabelWrapper} from '../../../components/label-wrapper';
 
 const FixedBottomLeft = styled.div`
   position: fixed;
-  bottom: 20px;
-  left: 20px;
+  bottom: 10px;
+  left: 10px;
 `;
 
 const ExtendedDiv = styled.div`

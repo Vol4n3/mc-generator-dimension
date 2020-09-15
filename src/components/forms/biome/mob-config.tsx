@@ -9,14 +9,19 @@ import {parseInput} from '../../../utils/math.utils';
 interface MobConfigProps {
   config: SpawnerConfig;
   onChange: (sc: SpawnerConfig) => void;
+  selected: string[];
 }
 
 export const MobConfig: FC<MobConfigProps> = props => {
-  const {config, onChange} = props;
+  const {config, onChange, selected} = props;
+  console.log(selected);
   return <>
     <LabelWrapper label={'type'} caption={'entity id of the mob'}>
       <Select
-        options={mobs.map(item => ({label: item, value: item}))}
+        options={mobs.filter(m => selected.filter(s => s !== config.type).indexOf(m) === -1).map(item => ({
+          label: item,
+          value: item
+        }))}
         value={config.type}
         required
         onSelected={value => onChange({...config, type: value as MobsType})}/>
