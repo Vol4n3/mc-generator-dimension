@@ -1,5 +1,5 @@
 import {Structures} from './structures';
-import {BlocksType} from './blocks';
+import {BlocksType} from './mc-blocks';
 import {BiomesType} from './biome';
 
 export interface Noise {

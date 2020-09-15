@@ -38,23 +38,18 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
       required
       onChange={e => onChange({...biome, name: e.target.value})}
     />
-    <LabelWrapper
+    <Select
       label={'precipitation'}
-      caption={'The type of precipitation found in this biome'}>
-      <Select
-        value={biome.precipitation === 'none' ? '' : biome.precipitation}
-        options={Precipitations.slice(1).map(item => ({label: item, value: item}))}
-        onSelected={value => onChange({...biome, precipitation: (value ? value : 'none') as Precipitation})
-        }/>
-    </LabelWrapper>
+      caption={'The type of precipitation found in this biome'}
+      value={biome.precipitation === 'none' ? '' : biome.precipitation}
+      options={Precipitations.slice(1)}
+      onSelected={value => onChange({...biome, precipitation: (value ? value : 'none') as Precipitation})
+      }/>
     <LabelWrapper
       label={'category'}>
       <Select
         value={biome.category === 'none' ? '' : biome.category}
-        options={BiomeCategories.slice(1).map(item => ({
-          label: item,
-          value: item
-        }))}
+        options={BiomeCategories.slice(1)}
         onSelected={value => onChange({...biome, category: (value ? value : 'none') as BiomeCategory})
         }/>
       <LabelWrapperCaption>
@@ -105,7 +100,7 @@ export const BiomeForm: FC<BiomeFormsProps> = props => {
       label={'temperature_modifier'}>
       <Select
         value={biome.temperature_modifier === 'none' ? '' : biome.temperature_modifier}
-        options={TempModifiers.slice(1).map(item => ({label: item, value: item}))}
+        options={TempModifiers.slice(1)}
         onSelected={value => onChange({...biome, temperature_modifier: (value ? value : 'none') as TempModifier})
         }/>
     </LabelWrapper>

@@ -17,7 +17,7 @@ export const BiomeCarversForm: FC<BiomeCarversFormProps> = props => {
         <MultiSelect
           label={'Air'}
           caption={'List of carvers used to fill areas with air.'}
-          values={carvers.air}
+          values={carvers.air || []}
           uid={'carversAir'}
           options={CarversAir}
           onChange={values => onChange({...carvers, air: values})}/>
@@ -26,7 +26,7 @@ export const BiomeCarversForm: FC<BiomeCarversFormProps> = props => {
         <MultiSelect
           label={'Liquid'}
           caption={'List of carvers used to fill areas with the liquid.'}
-          values={carvers.liquid}
+          values={carvers.liquid || []}
           uid={'carversLiquid'}
           options={CarversLiquid}
           onChange={values => onChange({...carvers, liquid: values})}/>

@@ -1,6 +1,7 @@
 import {Structures} from './structures';
-import {BlocksType} from './blocks';
+import {BlocksType} from './mc-blocks';
 import {FluidsType} from './fluids';
+
 export const noiseSettingsDefault = [
   'minecraft:overworld',
   'minecraft:amplified',
@@ -11,6 +12,12 @@ export const noiseSettingsDefault = [
 ]
 export interface NoiseSettings {
   name: string;
+  default_fluid: {
+    Name: FluidsType;
+    Properties: {
+      level?: string
+    },
+  }
   bedrock_roof_position: number;
   bedrock_floor_position: number;
   sea_level: number;
@@ -50,10 +57,5 @@ export interface NoiseSettings {
       level?: string;
     }
   },
-  default_fluid: {
-    Name: FluidsType;
-    Properties: {
-      level?: number
-    },
-  }
+  id: number;
 }

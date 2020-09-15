@@ -15,6 +15,7 @@ import {DimensionTypePanels} from '../../../components/forms/dimension-type/dime
 import {KeyframesConfig, Phase} from '../../../components/phase';
 import {TagCloud} from '../../../components/tag-cloud';
 import {LabelWrapper} from '../../../components/label-wrapper';
+import {NoiseSettingsPanels} from '../../../components/forms/noise-settings/noise-settings-panels';
 
 const FixedBottomLeft = styled.div`
   position: fixed;
@@ -30,7 +31,7 @@ position: relative;
 const DimensionsPage = () => {
   const [getDimensions, setDimensions] = useState<Dimension[]>([]);
   const [getDimensionType, setDimensionType] = useState<DimensionType[]>([]);
-  const [getNoiseSettings] = useState<NoiseSettings[]>([]);
+  const [getNoiseSettings, setNoiseSettings] = useState<NoiseSettings[]>([]);
   const [getBiomes, setBiomes] = useState<Biome[]>([]);
   const [getNamespace, setNamespace] = useState<string>('generator');
   const [getSelectedTab, setSelectedTab] = useState<number>(0);
@@ -128,6 +129,13 @@ const DimensionsPage = () => {
       enter={{keyframes: KeyframesConfig.fadeIn, delay: 250}}
       exit={{keyframes: KeyframesConfig.fadeOut}}>
       <ExtendedDiv>
+        <NoiseSettingsPanels
+          noiseSettings={getNoiseSettings}
+          onSubmit={nss => {
+            setNoiseSettings(nss);
+            setSelectedTab(0);
+          }
+          }/>
       </ExtendedDiv>
     </Phase>
     <Phase

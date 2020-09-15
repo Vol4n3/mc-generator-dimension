@@ -27,7 +27,7 @@ export const SpawnerConfigForm: FC<SpawnerConfigFormProps> = props => {
   return <>
     <Button onClick={addConfig}>+</Button>
     {configs.map((config, index) => <Card
-      key={config.id}
+      key={config.id || index}
       onClose={() => onChange(removeItemInArray(configs, index))}
       bgColor={'#ffe4e8'}>
       <MobConfig

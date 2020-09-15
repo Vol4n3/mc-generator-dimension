@@ -14,14 +14,10 @@ interface MobConfigProps {
 
 export const MobConfig: FC<MobConfigProps> = props => {
   const {config, onChange, selected} = props;
-  console.log(selected);
   return <>
     <LabelWrapper label={'type'} caption={'entity id of the mob'}>
       <Select
-        options={mobs.filter(m => selected.filter(s => s !== config.type).indexOf(m) === -1).map(item => ({
-          label: item,
-          value: item
-        }))}
+        options={mobs.filter(m => selected.filter(s => s !== config.type).indexOf(m) === -1)}
         value={config.type}
         required
         onSelected={value => onChange({...config, type: value as MobsType})}/>

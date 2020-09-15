@@ -93,10 +93,7 @@ export const BiomeSourceForm: FC<BiomeSourceProps> = props => {
     <LabelWrapper label={'Biome source type'} caption={"The type of biome generation"}>
       <Select
         onSelected={emitChangeBST}
-        options={biomesTypes.map((bt) => ({
-          label: bt.replace('minecraft:', ''),
-          value: bt
-        }))}
+        options={biomesTypes}
         value={biomeSource.type}
         required/>
     </LabelWrapper>

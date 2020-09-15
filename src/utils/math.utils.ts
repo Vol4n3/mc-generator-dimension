@@ -1,7 +1,7 @@
 export const generateSeed = (): number => {
   return Math.round((Math.random() * 2 - 1) * Math.pow(2, 32));
 }
-export const intToHexaColor = (n: number): string => {
+export const intToHexaColor = (n: number = 0): string => {
   return '#' + (n).toString(16).padStart(6, '0')
 };
 export const parseColor = (color: string): number => {

@@ -19,6 +19,7 @@ export const exportFiles = (data: Data) => {
       generator: dim.generator
     }, null, 2))
   });
+
   const dimensionType = rootNamespaceFolder?.folder('dimension_type');
   data.dimensionType.forEach((dim) => {
     dimensionType?.file(dim.name + '.json', JSON.stringify(dim, null, 2))
@@ -27,6 +28,10 @@ export const exportFiles = (data: Data) => {
   const biomeFolder = worldgenFolder?.folder('biome');
   data.biomes.forEach((biome) => {
     biomeFolder?.file(biome.name + '.json', JSON.stringify(biome, null, 2))
+  });
+  const noiseSettingsFolder = worldgenFolder?.folder('noise_settings');
+  data.noiseSettings.forEach((ns) => {
+    noiseSettingsFolder?.file(ns.name + '.json', JSON.stringify(ns, null, 2))
   });
   zip.generateAsync({type: "blob"})
     .then(function (content) {

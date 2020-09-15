@@ -5,6 +5,7 @@ import {DimensionForm} from './dimension.form';
 import {Dimension} from '../../../interface/dimension';
 import {generateSeed} from '../../../utils/math.utils';
 import {removeItemInArray, updateItemInArray} from '../../../utils/object.manipulation';
+import {ImportJson} from '../../import-json/import-json';
 
 interface DimensionPanelsProps {
   dimensions: Dimension[];
@@ -36,7 +37,16 @@ export const DimensionPanels: FC<DimensionPanelsProps> = props => {
     e.preventDefault();
     onSubmit(getDimensions);
   }
+  const fromFile = (json: Object) => {
+    setDimensions([{
+      ...json,
+      id: getId
+    } as Dimension,
+      ...getDimensions]);
+    setId(getId + 1);
+  }
   return <form onSubmit={emitSubmit}>
+    <ImportJson onChange={fromFile}/>
     <Flex justifyContent={['center']}>
       <Button onClick={createDimension}>add new dimension</Button>
       <Button type={'submit'} disabled={!getDimensions.length}>Save</Button>

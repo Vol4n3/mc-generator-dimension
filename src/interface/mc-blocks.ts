@@ -1,4 +1,4 @@
-export const blocks = [
+export const McBlocks = [
   "minecraft:acacia_button",
   "minecraft:acacia_door",
   "minecraft:acacia_fence_gate",
@@ -750,6 +750,4 @@ export const blocks = [
   "minecraft:yellow_wall_banner",
   "minecraft:yellow_wool",
   "minecraft:zombie_head",
-  "minecraft:zombie_wall_head"] as const;
-
-export type BlocksType = typeof blocks[number];
+  "minecraft:zombie_wall_head"];

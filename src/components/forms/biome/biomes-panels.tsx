@@ -4,6 +4,7 @@ import {Flex} from '../../flex';
 import {Button} from '../../button';
 import {BiomeForm} from './biome.form';
 import {removeItemInArray, updateItemInArray} from '../../../utils/object.manipulation';
+import {ImportJson} from '../../import-json/import-json';
 
 interface BiomesPanelsProps {
   biomes: Biome[];
@@ -61,7 +62,17 @@ export const BiomesPanels: FC<BiomesPanelsProps> = props => {
     e.preventDefault();
     onSubmit(getBiomes);
   }
+  const fromFile = (json: Object) => {
+    console.log(json);
+    setBiomes([{
+      ...json,
+      id: getId
+    } as Biome,
+      ...getBiomes]);
+    setId(getId + 1);
+  }
   return <form onSubmit={emitSubmit}>
+    <ImportJson onChange={fromFile}/>
     <Flex justifyContent={['center']}>
       <Button onClick={createBiome}>Add new biome </Button>
       <Button type={'submit'} disabled={!getBiomes.length}>Save biomes</Button>

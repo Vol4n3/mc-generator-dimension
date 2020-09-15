@@ -65,7 +65,7 @@ export const BiomeFeaturesForm: FC<BiomeFeaturesFormProps> = props => {
           <MultiSelect
             label={level.label}
             caption={level.caption}
-            values={biomeFeatures[index]}
+            values={biomeFeatures[index] || []}
             uid={level.label}
             options={featuresOptions[index]}
             onChange={values => onChange(updateItemInArray(biomeFeatures, index, values) as BiomeFeaturesLevel)}/>

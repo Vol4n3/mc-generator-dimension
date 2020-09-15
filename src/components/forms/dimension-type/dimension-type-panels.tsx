@@ -4,6 +4,7 @@ import {Button} from '../../button';
 import {DimensionTypeForm} from './dimension-type.form';
 import {DimensionType} from '../../../interface/dimension-type';
 import {removeItemInArray, updateItemInArray} from '../../../utils/object.manipulation';
+import {ImportJson} from '../../import-json/import-json';
 
 interface DimensionTypePanelProps {
   dimensionTypes: DimensionType[];
@@ -40,7 +41,16 @@ export const DimensionTypePanels: FC<DimensionTypePanelProps> = props => {
     e.preventDefault();
     onSubmit(getDimensionTypes);
   }
+  const fromFile = (json: Object) => {
+    setDimensionTypes([{
+      ...json,
+      id: getId
+    } as DimensionType,
+      ...getDimensionTypes]);
+    setId(getId + 1);
+  }
   return <form onSubmit={emitSubmit}>
+    <ImportJson onChange={fromFile}/>
     <Flex justifyContent={['center']}>
       <Button onClick={() => createDimensionType()}>Add new dimension type </Button>
       <Button type={'submit'} disabled={!getDimensionTypes.length}>Save</Button>

@@ -3,7 +3,6 @@ import {BiomeEffects, GrassColorModifier, GrassColorModifiers} from '../../../in
 import {InputLabel} from '../../input/input-label';
 import {intToHexaColor, parseColor} from '../../../utils/math.utils';
 import {Select} from '../../select/select';
-import {LabelWrapper} from '../../label-wrapper';
 import {Flex} from '../../flex';
 
 interface BiomeEffectFormProps {
@@ -11,7 +10,7 @@ interface BiomeEffectFormProps {
   onChange: (biomeEffects: BiomeEffects) => void;
 }
 
-const optionGrass = GrassColorModifiers.slice(1).map(item => ({label: item, value: item}))
+const optionGrass = GrassColorModifiers.slice(1);
 export const BiomeEffectForm: FC<BiomeEffectFormProps> = props => {
   const {biomeEffects, onChange} = props;
   const refTimeout = useRef<number>(0);
@@ -67,15 +66,14 @@ export const BiomeEffectForm: FC<BiomeEffectFormProps> = props => {
           type={'color'}/>
       </Flex>
     </Flex>
-    <LabelWrapper label={"grass_color_modifier"}>
       <Select
+        label={"grass_color_modifier"}
         value={biomeEffects.grass_color_modifier === 'none' ? '' : biomeEffects.grass_color_modifier}
         options={optionGrass}
         onSelected={value => onChange({
           ...biomeEffects,
           grass_color_modifier: (value ? value : 'none') as GrassColorModifier
         })}/>
-    </LabelWrapper>
     {/*todo: particle*/}
     {/*todo: ambiant sound*/}
     {/*todo: mood sound*/}

@@ -119,12 +119,12 @@ export const DimensionTypeForm: FC<DimensionTypeFormProps> = props => {
       value={dimensionType.logical_height}
       onChange={e => onChange({...dimensionType, logical_height: parseInput(e.target.value, 1, 256)})}/>
     <LabelWrapper
-      caption={" A resource location defining what block tag to use for infiniburn"}>
+      caption={"A resource location defining what block tag to use for infiniburn"}>
       <Select value={dimensionType.infiniburn}
               options={[
-                {value: "minecraft:infiniburn_end", label: 'infiniburn End'},
-                {value: "minecraft:infiniburn_nether", label: 'infiniburn Nether'},
-                {value: "minecraft:infiniburn_overworld", label: 'infiniburn overworld'},
+                "minecraft:infiniburn_end",
+                "minecraft:infiniburn_nether",
+                "minecraft:infiniburn_overworld",
               ]}
               required
               onSelected={e => onChange({...dimensionType, infiniburn: e})}/>
